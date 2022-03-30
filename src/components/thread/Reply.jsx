@@ -3,7 +3,7 @@ import { useState } from "react";
 export const Reply = (props) => {
 	const [repPassword, setRepPword] = useState("");
 
-	const sendDelReq = () => {
+	const sendDelRepReq = () => {
 		props.deleteElement(
 			props.url,
 			{
@@ -20,7 +20,7 @@ export const Reply = (props) => {
 
 	const handleRepPword = e => setRepPword(e.target.value);
 
-	const sendRepReq = () => {
+	const sendReportRepReq = () => {
 		props.reportElement(
 			props.url,
 			{ 
@@ -39,7 +39,7 @@ export const Reply = (props) => {
 					<button
 						className="thread-btn reportThread"
 						type="button"
-						onClick={sendRepReq}
+						onClick={sendReportRepReq}
 					>
 						Report
 					</button>
@@ -54,7 +54,7 @@ export const Reply = (props) => {
 						<button 
 							className="thread-btn"
 							type="button"
-							onClick={sendDelReq}
+							onClick={sendDelRepReq}
 						>
 							Delete
 						</button>

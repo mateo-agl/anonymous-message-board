@@ -43,26 +43,28 @@ export const Thread = (props) => {
 		);
 	};
 
-	const reportThread = () => {
+	const sendReportThreatReq = () => {
 		props.reportElement(
 			threadsUrl,
 			{ thread_id: thread._id }
 		);
 	};
 	
-	const delThread = async () => {
-		const res = await props.deleteElement(
+	const sendDelThreadReq = () => {
+		props.deleteElement(
 			threadsUrl,
 			{
 				thread_id: thread._id,
 				delete_password: thread.delete_password
 			},
+			data => {
+				if(!data) return alert("Incorrect password");
+				window.location.href = `${window.location.origin}/b/${currentURL[2]}`;
+			}
 		);
-		if(!res) return alert("Incorrect password");
-		window.location.href = `${window.location.origin}/b/${currentURL[2]}`;
 	};
 		
-	const sendData = () => {
+	const sendNewRepReq = () => {
 		props.createElement(
 			repliesUrl,
 			thread.newRep,
@@ -102,7 +104,7 @@ export const Thread = (props) => {
 						<div>
 							<button
 								className="thread-btn reportThread"
-								onClick={reportThread}
+								onClick={sendReportThreatReq}
 							>
 								Report
 							</button>
@@ -117,7 +119,7 @@ export const Thread = (props) => {
 								<button 
 									className="thread-btn"
 									type="button"
-									onClick={delThread}
+									onClick={sendDelThreadReq}
 								>
 									Delete
 								</button>
@@ -144,7 +146,7 @@ export const Thread = (props) => {
 							/>
 							<button
 								type="button"
-								onClick={sendData}
+								onClick={sendNewRepReq}
 							>
 								Submit
 							</button>

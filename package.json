@@ -50,8 +50,11 @@
     "nodemon": "^2.0.15"
   },
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mateo-agl/anonymous-message-board.git"
+  },
   "bugs": {
     "url": "https://github.com/mateo-agl/anonymous-message-board/issues"
-  },
-  "homepage": "https://github.com/mateo-agl/anonymous-message-board#readme"
+  }
 }
