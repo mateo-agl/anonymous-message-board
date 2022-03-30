@@ -1,0 +1,41 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react"
+    ],
+    "settings": {
+        "react": {
+            "version": "detect"
+        }
+    },
+    "rules": {
+        "react/prop-types": 0,
+        "react/self-closing-comp": ["error", {
+            "component": true,
+            "html": true
+        }],
+        "react/jsx-closing-bracket-location": ["error", "tag-aligned"],
+        "react/jsx-closing-tag-location": ["error", 1],
+        "react/jsx-sort-props": ["error", {
+            "callbacksLast": true
+        }],
+        "indent": ["error", "tab"],
+        "react/jsx-indent": ["error", "tab"],
+        "multiline-ternary": ["error", "always-multiline"],
+        "semi": ["warn", "always"]
+    }
+}
