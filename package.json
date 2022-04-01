@@ -4,6 +4,7 @@
   "description": "InfoSec project for freeCodeCamp",
   "main": "server.js",
   "scripts": {
+    "client": "react-scripts start",
     "start": "nodemon server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -13,7 +14,6 @@
   "dependencies": {
     "axios": "^0.26.1",
     "body-parser": "^1.19.1",
-    "cross-env": "^7.0.3",
     "dotenv": "^14.1.0",
     "express": "^4.17.2",
     "helmet": "^3.1.0",

@@ -28,7 +28,7 @@ mongoose
   .connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     const listener = app.listen(process.env.PORT || 3000, () => {
-      console.log("Your app is running on http://localhost:" + listener.address().port);
+      console.log("Your app is running on port " + listener.address().port);
     });
   })
   .catch((e) => console.error(e));

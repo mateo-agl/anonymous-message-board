@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
-
 * {
   margin: 0px;
   padding: 0px;
@@ -11,17 +9,15 @@ html {
   background-color: hsl(0, 0%, 10%);
 }
 
-h1 {
-  font-size: 3em;
-}
-
 h2 {
   font-size: 2em;
 }
 
 label {
+  display: block;
   font-size: .8em;
   color: rgb(124, 124, 124);
+  margin-bottom: 1em;
 }
 
 hr {
@@ -34,8 +30,11 @@ hr {
   height: 100vh;
   margin: 0 auto;
 }
+.title {
+  font-size: 3em;
+}
 
-#main-title {
+.main-title {
   text-align: center;
 }
 
@@ -86,8 +85,8 @@ button:hover {
 .thread-cont {
   padding: 1em;
 }
-
-.thread, .thread-link, .replies {
+.replies {height:100px;margin: 5em}
+.thread, .thread-link {
   margin-bottom: 1em;
 }
 
@@ -97,11 +96,11 @@ button:hover {
   width: 100%;
 }
 
-.thread-form {
+.del-form {
   display: inline-block;
 }
 
-.thread-btn, .thread-input {
+.del-btn, .rep-btn, .del-input {
   margin: 0;
   padding: 3px;
 }
@@ -111,7 +110,7 @@ button:hover {
 }
 
 .reply {
-  padding: 2em;
+  padding: 1em;
 }
 
 .board-cont {
@@ -122,4 +121,3 @@ button:hover {
 .board-link {
   margin: 0 1em;
 }
-

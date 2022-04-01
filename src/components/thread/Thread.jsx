@@ -1,75 +1,75 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { ReportBtn, CreateForm, DeleteForm } from "../subComponents";
 import { Reply } from "./Reply";
 
-export const Thread = (props) => {
+export const Thread = ({
+	fetchData,
+	reportElement,
+	deleteElement,
+	createElement
+}) => {
 	const [thread, setThread] = useState("");
 	const currentURL = window.location.pathname.split("/");
 	const repliesUrl = `/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`;
 	const threadsUrl = `/api/threads/${currentURL[2]}`;
 	
-	useEffect(() => props.fetchData(repliesUrl, data => {
-		setThread(
-			{
-				...data,
-				delete_password: "",
-				newRep: {
-					thread_id: data._id,
-					quick_reply: true,
-					text: "",
-					delete_password: ""
-				}
+	useEffect(() => fetchData(repliesUrl, data => {
+		setThread({
+			...data,
+			delete_password: "",
+			newRep: {
+				thread_id: data._id,
+				quick_reply: true,
+				text: "",
+				delete_password: ""
 			}
-		);
+		});
 	}), []);
 
 	const handleNewRep = e => {
-		setThread(
-			{
-				...thread,
-				newRep: {
-					...thread.newRep,
-					[e.target.name]: e.target.value
-				}
+		setThread({
+			...thread,
+			newRep: {
+				...thread.newRep,
+				[e.target.name]: e.target.value
 			}
-		);
+		});
 	};
 
 	const handleThreadPassword = e => {
-		setThread(
-			{
-				...thread,
-				delete_password: e.target.value
-			}
-		);
+		setThread({
+			...thread,
+			delete_password: e.target.value
+		});
 	};
 
 	const sendReportThreatReq = () => {
-		props.reportElement(
+		reportElement(
 			threadsUrl,
 			{ thread_id: thread._id }
 		);
 	};
 	
 	const sendDelThreadReq = () => {
-		props.deleteElement(
+		deleteElement(
 			threadsUrl,
 			{
 				thread_id: thread._id,
 				delete_password: thread.delete_password
 			},
 			data => {
-				if(!data) return alert("Incorrect password");
-				window.location.href = `${window.location.origin}/b/${currentURL[2]}`;
+				if (data) return history.back();
+				alert("Incorrect password");
 			}
 		);
 	};
 		
 	const sendNewRepReq = () => {
-		props.createElement(
+		createElement(
 			repliesUrl,
 			thread.newRep,
-			rep => setThread(
-				{
+			rep => {
+				setThread({
 					...thread,
 					replies: [rep, ...thread.replies],
 					newRep: {
@@ -78,12 +78,12 @@ export const Thread = (props) => {
 						text: "",
 						delete_password: ""
 					}
-				}
-			)
+				});
+			}
 		);
 	};
 
-	const delRepFromState = (index) => {
+	const delRepFromState = index => {
 		const newReplies = thread.replies.slice();
 		newReplies.splice(index, 1);
 		setThread({ ...thread, replies: newReplies });
@@ -93,84 +93,51 @@ export const Thread = (props) => {
 	return (
 		<div className="container">
 			<header>
-				<h1 id="threadTitle">{thread._id}</h1>
+				<h1 className="title">{thread._id}</h1>
 			</header>
-			<div id="boardDisplay">
-				<div className="thread">
-					<div className="actions-cont">
-						<label className="id">
-							{thread.created_on}
-						</label>
-						<div>
-							<button
-								className="thread-btn reportThread"
-								onClick={sendReportThreatReq}
-							>
-								Report
-							</button>
-							<form className="thread-form">
-								<input 
-									className="thread-input"
-									placeholder="password"
-									required
-									value={thread.delete_password}
-									onChange={handleThreadPassword}
-								/>
-								<button 
-									className="thread-btn"
-									type="button"
-									onClick={sendDelThreadReq}
-								>
-									Delete
-								</button>
-							</form>
-						</div>
+			<div className="thread">
+				<div className="actions-cont">
+					<label className="id">
+						{thread.created_on}
+					</label>
+					<div>
+						<ReportBtn sendReportReq={sendReportThreatReq}/>
+						<DeleteForm
+							deletePassword={thread.delete_password}
+							handlePassword={handleThreadPassword}
+							sendDelReq={sendDelThreadReq}
+						/>
 					</div>
-					<h2>{thread.text}</h2>
-					<hr/>
-					<div className="form-cont">
-						<form>
-							<textarea
-								name="text"
-								placeholder="Quick reply..."
-								required
-								value={thread.newRep.text}
-								onChange={handleNewRep}
-							/>
-							<input
-								name="delete_password"
-								placeholder="password to delete"
-								required
-								value={thread.newRep.delete_password}
-								onChange={handleNewRep}
-							/>
-							<button
-								type="button"
-								onClick={sendNewRepReq}
-							>
-								Submit
-							</button>
-						</form>
-					</div>
-					<div className="replies">
-						{
-							thread.replies.map(
-								(rep, i) =>
-									<div key={i}>
-										<Reply
-											delRepFromState={delRepFromState}
-											deleteElement={props.deleteElement}
-											index={i}
-											rep={rep}
-											reportElement={props.reportElement}
-											thread={thread}
-											url={repliesUrl}
-										/>
-										<hr/>
-									</div>
-							)
-						}
-					</div>
+				</div>
+				<h2>{thread.text}</h2>
+				<hr/>
+				<div className="form-cont">
+					<CreateForm
+						deletePassword={thread.newRep.delete_password}
+						handleData={handleNewRep}
+						placeholder={"Reply"}
+						sendNewEleReq={sendNewRepReq}
+						text={thread.newRep.text}
+					/>
+				</div>
+				<div className="replies">
+					{
+						thread.replies.map(
+							(rep, i) =>
+								<div key={i}>
+									<Reply
+										delRepFromState={delRepFromState}
+										deleteElement={deleteElement}
+										index={i}
+										rep={rep}
+										reportElement={reportElement}
+										thread={thread}
+										url={repliesUrl}
+									/>
+									<hr/>
+								</div>
+						)
+					}
 				</div>
 			</div>
 		</div>

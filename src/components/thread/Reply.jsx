@@ -1,19 +1,31 @@
 import { useState } from "react";
+import { ReportBtn, DeleteForm } from "../subComponents";
 
-export const Reply = (props) => {
+export const Reply = ({
+	deleteElement,
+	url,
+	thread,
+	rep,
+	delRepFromState,
+	index,
+	reportElement,
+}) => {
 	const [repPassword, setRepPword] = useState("");
 
 	const sendDelRepReq = () => {
-		props.deleteElement(
-			props.url,
+		deleteElement(
+			url,
 			{
-				thread_id: props.thread._id,
-				reply_id: props.rep._id
+				thread_id: thread._id,
+				reply_id: rep._id
 			},
 			data => {
-				if (!data) return alert("Incorrect password");
-				props.delRepFromState(props.index);
-				setRepPword("");
+				if (data) {
+					delRepFromState(index);
+					setRepPword("");
+					return;
+				} 
+				alert("Incorrect password");
 			}
 		);
 	};
@@ -21,11 +33,11 @@ export const Reply = (props) => {
 	const handleRepPword = e => setRepPword(e.target.value);
 
 	const sendReportRepReq = () => {
-		props.reportElement(
-			props.url,
+		reportElement(
+			url,
 			{ 
-				thread_id: props.thread._id,
-				reply_id: props.rep._id
+				thread_id: thread._id,
+				reply_id: rep._id
 			}
 		);
 	};
@@ -33,35 +45,18 @@ export const Reply = (props) => {
 		<div className="reply">
 			<div className="actions-cont">
 				<label className="id">
-					{`id: ${props.rep._id} (${props.rep.created_on})`}
+					{`id: ${rep._id} (${rep.created_on})`}
 				</label>
 				<div>
-					<button
-						className="thread-btn reportThread"
-						type="button"
-						onClick={sendReportRepReq}
-					>
-						Report
-					</button>
-					<form className="thread-form">
-						<input 
-							className="thread-input"
-							placeholder="password"
-							required
-							value={repPassword}
-							onChange={handleRepPword}
-						/>
-						<button 
-							className="thread-btn"
-							type="button"
-							onClick={sendDelRepReq}
-						>
-							Delete
-						</button>
-					</form>
+					<ReportBtn sendReportReq={sendReportRepReq}/>
+					<DeleteForm
+						deletePassword={repPassword}
+						handlePassword={handleRepPword}
+						sendDelReq={sendDelRepReq}
+					/>
 				</div>
 			</div>
-			<h3>{props.rep.text}</h3>
+			<h3>{rep.text}</h3>
 		</div>
 	);
 };

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const Main = props => {
+export const Main = ({createElement}) => {
 	const [newThread, setNewThread] = useState(
 		{
 			board: "",
@@ -11,17 +11,15 @@ export const Main = props => {
 	const url = "/api/threads/";
 
 	const handleNewThreadData = e => {
-		setNewThread(
-			{
-				...newThread,
-				[e.target.name]: e.target.value
-			}
-		);
+		setNewThread({
+			...newThread,
+			[e.target.name]: e.target.value
+		});
 	};
 
 	const sendNewThreadReq = () => {
 		const newUrl = url + newThread.board;
-		props.createElement(newUrl, newThread, data => {
+		createElement(newUrl, newThread, data => {
 			if (data) window.location.href = `b/${data.board}/${data._id}`;
 		});
 	};
@@ -29,7 +27,7 @@ export const Main = props => {
 	return (
 		<div className="container">
 			<header>
-				<h1 id="main-title">Anonymous Message Board</h1>
+				<h1 className="main-title title">Anonymous Message Board</h1>
 			</header>
 			<div className="board-cont">
 				<h2>Boards</h2>
@@ -46,21 +44,18 @@ export const Main = props => {
 						name="board"
 						placeholder="board"
 						required
-						type="text"
 						onChange={handleNewThreadData}
 					/>
 					<textarea
 						name="text"
 						placeholder="Thread text..."
 						required
-						type="text"
 						onChange={handleNewThreadData}
 					/>
 					<input
 						name="delete_password"
 						placeholder="password to delete"
 						required
-						type="text"
 						onChange={handleNewThreadData}
 					/>
 					<button
