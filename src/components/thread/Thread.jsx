@@ -10,8 +10,12 @@ export const Thread = ({
 }) => {
 	const [thread, setThread] = useState("");
 	const currentURL = window.location.pathname.split("/");
-	const repliesUrl = `/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`;
-	const threadsUrl = `/api/threads/${currentURL[2]}`;
+	const repliesUrl = process.env.NODE_ENV === "development"
+		? `http://localhost:5000/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`
+		: `/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`;
+	const threadsUrl = process.env.NODE_ENV === "development"
+		? `http://localhost:5000/api/threads/${currentURL[2]}`
+		: `/api/threads/${currentURL[2]}`;
 	
 	useEffect(() => fetchData(repliesUrl, data => {
 		setThread({

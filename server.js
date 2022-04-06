@@ -7,6 +7,13 @@ const apiRoutes = require("./routes/api.js");
 const helmet = require("helmet");
 const app = express();
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+  next();
+});
+
 app.use(
   helmet({
     frameguard: { action: "sameorigin" },
@@ -27,7 +34,7 @@ apiRoutes(app);
 mongoose
   .connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    const listener = app.listen(process.env.PORT || 3000, () => {
+    const listener = app.listen(process.env.SERVER_PORT || 3000, () => {
       console.log("Your app is running on port " + listener.address().port);
     });
   })

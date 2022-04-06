@@ -10,7 +10,9 @@ export const Board = ({
 }) => {
 	const [data, setData] = useState("");
 	const currentBoard = window.location.pathname.slice(3);
-	const url = `/api/threads/${currentBoard}`;
+	const url = process.env.NODE_ENV === "development"
+		? `http://localhost:5000/api/threads/${currentBoard}`
+		: `/api/threads/${currentBoard}`;
 	const title = `Welcome to ${currentBoard}`;
 	
 	useEffect(() => fetchData(url, data => {
