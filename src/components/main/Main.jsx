@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 export const Main = ({createElement}) => {
 	const [newThread, setNewThread] = useState(

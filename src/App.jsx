@@ -4,7 +4,7 @@ import { Main, Board, Thread } from "./components";
 import "./app.css";
 import axios from 'axios';
 
-export const App = () => {
+const App = () => {
 	const fetchData = (url, action) => {
 		axios.get(url)
 			.then(res => action(res.data))
@@ -67,3 +67,5 @@ export const App = () => {
 		</Routes>
 	);
 };
+
+export default App;

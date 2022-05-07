@@ -17,7 +17,8 @@ export const Reply = ({
 			url,
 			{
 				thread_id: thread._id,
-				reply_id: rep._id
+				reply_id: rep._id,
+				delete_password: repPassword
 			},
 			data => {
 				if (data) {

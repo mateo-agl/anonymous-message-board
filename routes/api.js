@@ -9,7 +9,7 @@ const {
   reportReply,
 } = require("../mongoose.js");
 
-module.exports = apiRoutes = (app) => {
+const apiRoutes = (app) => {
   app
     .route("/api/threads/:board")
     .post((req, res) => {
@@ -49,7 +49,8 @@ module.exports = apiRoutes = (app) => {
     .delete((req, res) => {
       const b = req.body;
       deleteReply(b.thread_id, b.reply_id, b.delete_password, (doc) => {
-        if (!doc) return res.send("Incorrect password");
+        res.json(doc);
       });
     });
 };
+module.exports = apiRoutes;
