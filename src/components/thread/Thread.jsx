@@ -62,7 +62,7 @@ export const Thread = ({
 				delete_password: thread.delete_password
 			},
 			data => {
-				if (data) return history.back();
+				if (data) return (window.location.pathname = `/b/${currentURL[2]}`);
 				alert("Incorrect password");
 			}
 		);
