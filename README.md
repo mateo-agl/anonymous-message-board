@@ -6,8 +6,9 @@ Clone repository
 ```
 git clone https://github.com/mateo-agl/anonymous-message-board.git
 cd anonymous-message-board
+npm install
 ```
-Create an env file with a mongo database URI.
+Create an .env file with a mongo database URI.
 
 ## Scripts
 
