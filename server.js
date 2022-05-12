@@ -13,13 +13,6 @@ import App from "./src/App.jsx";
 import { StaticRouter } from "react-router-dom/server";
 const app = express();
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-  next();
-});
-
 app.use(
   helmet({
     frameguard: { action: "sameorigin" },
@@ -29,21 +22,31 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// app.use("/b/*", (req, res) => {
-//   fs.readFile(path.resolve("./build/index.html"), "utf-8", (err, data) => {
-//     if (err) {
-//       console.log(err);
-//       return res.status(500).send("Some error happened");
-//     }
-//     return res.send(
-//       data.replace(
-//         '<div id="root"></div>',
-//         `<div id="root">${ReactDOMServer.renderToString(<StaticRouter location={req.url}><App /></StaticRouter>)}</div>`
-//       )
-//     );
-//   });
-// });
-// app.use(express.static("./build"));
+
+if(process.env.MODE === "production") {
+  app.use("/b/*", (req, res) => {
+    fs.readFile(path.resolve("./build/index.html"), "utf-8", (err, data) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send("Some error happened");
+      }
+      return res.send(
+        data.replace(
+          '<div id="root"></div>',
+          `<div id="root">${ReactDOMServer.renderToString(<StaticRouter location={req.url}><App /></StaticRouter>)}</div>`
+        )
+      );
+    });
+  });
+  app.use(express.static("./build"));
+} else {
+  app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    next();
+  });
+}
 
 apiRoutes(app);
 
