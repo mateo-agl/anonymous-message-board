@@ -11,7 +11,13 @@ git clone https://github.com/mateo-agl/anonymous-message-board.git
 cd anonymous-message-board
 npm install
 ```
-Create an .env file and select the mode with a ```MODE``` variable (production or development), set the port with ```SERVER_PORT=5000``` or any other port and add your db URI with a ```URI``` variable.
+Create an .env file and paste this variables in it:
+```
+MODE=
+URI=
+SERVER_PORT=
+```
+Now you can set the mode to production or development, set the port to 5000 or any other port and add your DB URI.
 
 ## Scripts
 
