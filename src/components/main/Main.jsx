@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const Main = ({createElement}) => {
+export const Main = ({CreateForm}) => {
 	const [newThread, setNewThread] = useState(
 		{
 			board: "",
@@ -8,7 +8,6 @@ export const Main = ({createElement}) => {
 			text: ""
 		}
 	);
-	const url = "/api/threads/";
 
 	const handleNewThreadData = e => {
 		setNewThread({
@@ -17,13 +16,14 @@ export const Main = ({createElement}) => {
 		});
 	};
 
-	const sendNewThreadReq = () => {
-		const newUrl = url + newThread.board;
-		createElement(newUrl, newThread, data => {
-			if (data) window.location.href = `b/${data.board}/${data._id}`;
-		});
+	const createAction = data => {
+		if (data) window.location.href = `b/${data.board}/${data._id}`;
 	};
 
+	const url = process.env.NODE_ENV === "development"
+		? `http://localhost:5000/api/threads/${newThread.board}`
+		: `api/threads/${newThread.board}`;
+	
 	return (
 		<div className="container">
 			<header>
@@ -39,32 +39,17 @@ export const Main = ({createElement}) => {
 			</div>
 			<div className="form-cont">
 				<h4>New thread (POST /api/threads/:board)</h4>
-				<form>
-					<input
-						name="board"
-						placeholder="board"
-						required
-						onChange={handleNewThreadData}
-					/>
-					<textarea
-						name="text"
-						placeholder="Thread text..."
-						required
-						onChange={handleNewThreadData}
-					/>
-					<input
-						name="delete_password"
-						placeholder="password to delete"
-						required
-						onChange={handleNewThreadData}
-					/>
-					<button
-						type="button"
-						onClick={sendNewThreadReq}
-					>
-						Submit
-					</button>
-				</form>
+				<CreateForm
+					action={createAction}
+					deletePassword={newThread.delete_password}
+					handleData={handleNewThreadData}
+					placeholder={"Thread text..."}
+					reqBody={newThread}
+					text={newThread.text}
+					url={url}
+				>
+					<input name="board" placeholder="board" required onChange={handleNewThreadData}/>
+				</CreateForm>
 			</div>
 		</div>
 	);

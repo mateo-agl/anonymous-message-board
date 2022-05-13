@@ -13,16 +13,6 @@ import App from "./src/App.jsx";
 import { StaticRouter } from "react-router-dom/server";
 const app = express();
 
-app.use(
-  helmet({
-    frameguard: { action: "sameorigin" },
-    dnsPrefetchControl: { allow: false },
-    referrerPolicy: { policy: "same-origin" },
-  })
-);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
 if(process.env.MODE === "production") {
   app.use("/b/*", (req, res) => {
     fs.readFile(path.resolve("./build/index.html"), "utf-8", (err, data) => {
@@ -47,6 +37,16 @@ if(process.env.MODE === "production") {
     next();
   });
 }
+
+app.use(
+  helmet({
+    frameguard: { action: "sameorigin" },
+    dnsPrefetchControl: { allow: false },
+    referrerPolicy: { policy: "same-origin" },
+  })
+);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 apiRoutes(app);
 

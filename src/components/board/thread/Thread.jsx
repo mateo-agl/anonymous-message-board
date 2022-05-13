@@ -1,14 +1,13 @@
 import { useState } from "react";
-import { DeleteForm, ReportBtn } from "../../subComponents";
 import { Reply } from "./Reply";
 
 export const Thread = ({
+	DeleteForm,
+	ReportBtn,
 	thread,
 	index,
 	url,
-	reportElement,
 	delFromState,
-	deleteElement
 }) => {
 	const [threadPword, setThreadPword] = useState("");
 	const replies = thread.replies.slice(0, 3);
@@ -18,28 +17,14 @@ export const Thread = ({
 	
 	const handlePassword = e => setThreadPword(e.target.value);
 
-	const sendQuickDelReq = () => {
-		deleteElement(
-			url,
-			{
-				thread_id: thread._id,
-				delete_password: threadPword,
-			},
-			data => {
-				if(data) {
-					delFromState(index);
-					setThreadPword("");
-					return;
-				};
-				alert("Incorrect password");
-			}
-		);
+	const delAction = data => {
+		if(data) {
+			delFromState(index);
+			setThreadPword("");
+			return;
+		};
+		alert("Incorrect password");
 	};
-
-	const sendQuickRepReq = () => reportElement(
-		url,
-		{ thread_id: thread._id }
-	);
 	
 	return (
 		<div className="thread-cont">
@@ -49,11 +34,19 @@ export const Thread = ({
 						{`id: ${thread._id} (${thread.created_on})`}
 					</label>
 					<div>
-						<ReportBtn sendReportReq={sendQuickRepReq}/>
+						<ReportBtn
+							reqBody={{ thread_id: thread._id }}
+							url={url}
+						/>
 						<DeleteForm
+							action={delAction}
 							deletePassword={threadPword}
 							handlePassword={handlePassword}
-							sendDelReq={sendQuickDelReq}
+							reqBody={{
+								thread_id: thread._id,
+								delete_password: threadPword
+							}}
+							url={url}
 						/>
 					</div>
 				</div>

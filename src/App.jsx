@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Routes } from "react-router-dom";
 import { Main, Board, Thread } from "./components";
-import "./app.css";
 import axios from 'axios';
+import "./app.css";
 
 const App = () => {
 	const fetchData = (url, action) => {
@@ -11,43 +11,99 @@ const App = () => {
 			.catch(err => console.error(err));
 	};
 
-	const createElement = (url, reqBody, action) => {
-		axios.post(url, reqBody)
-			.then(res => action(res.data))
-			.catch(err => console.error(err));
-	};
-
-	const reportElement = (url, reqBody) => {
-		axios.put(url, reqBody)
+	const ReportBtn = ({url, reqBody}) => {
+		const sendReportReq = () => axios.put(url, reqBody)
 			.then(res => alert(res.data))
 			.catch(err => console.error(err));
-
+		return (
+			<button
+				className="rep-btn reportThread"
+				onClick={sendReportReq}
+			>
+				Report
+			</button>
+		);
 	};
 
-	const deleteElement = (url, reqBody, action) => {
-		axios.delete(url, { data: reqBody })
+	const DeleteForm = ({deletePassword, handlePassword, url, reqBody, action}) => {
+		const sendDelReq = () => axios.delete(url, { data: reqBody })
 			.then(res => action(res.data))
 			.catch(err => console.error(err));
+		return (
+			<form className="del-form">
+				<input 
+					className="del-input"
+					placeholder="password"
+					required
+					value={deletePassword}
+					onChange={handlePassword}
+				/>
+				<button 
+					className="del-btn"
+					type="button"
+					onClick={sendDelReq}
+				>
+					Delete
+				</button>
+			</form>
+		);
 	};
 
+	const CreateForm = ({
+		children,
+		placeholder,
+		text,
+		handleData,
+		deletePassword,
+		url,
+		reqBody,
+		action
+	}) => {
+		const sendNewEleReq = () => axios.post(url, reqBody)
+			.then(res => action(res.data))
+			.catch(err => console.error(err));
+		
+		return (
+			<form>
+				{children}
+				<textarea
+					name="text"
+					placeholder={placeholder}
+					required
+					value={text}
+					onChange={handleData}
+				/>
+				<input
+					name="delete_password"
+					placeholder="password to delete"
+					required
+					value={deletePassword}
+					onChange={handleData}
+				/>
+				<button
+					type="button"
+					onClick={sendNewEleReq}
+				>
+					Submit
+				</button>
+			</form>
+		);
+	};
+	
 	return (
 		<Routes>
 			<Route path="/">
 				<Route
-					element={
-						<Main
-							createElement={createElement}
-						/>
-					}
+					element={<Main CreateForm={CreateForm}/>}
 					index
 				/>
 				<Route
 					element={
 						<Board
-							createElement={createElement}
-							deleteElement={deleteElement}
+							CreateForm={CreateForm}
+							DeleteForm={DeleteForm}
+							ReportBtn={ReportBtn}
 							fetchData={fetchData}
-							reportElement={reportElement}
 						/>
 					}
 					path="b/:board"
@@ -55,10 +111,10 @@ const App = () => {
 				<Route
 					element={
 						<Thread
-							createElement={createElement}
-							deleteElement={deleteElement}
+							CreateForm={CreateForm}
+							DeleteForm={DeleteForm}
+							ReportBtn={ReportBtn}
 							fetchData={fetchData}
-							reportElement={reportElement}
 						/>
 					}
 					path="b/:board/:thread"

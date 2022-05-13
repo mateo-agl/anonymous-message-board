@@ -27,9 +27,13 @@ hr {
 .container {
   display: block;
   width: 70%;
-  height: 100vh;
-  margin: 0 auto;
+  margin: auto;
 }
+
+.home {
+  cursor: pointer;
+}
+
 .title {
   font-size: 3em;
 }
@@ -115,7 +119,7 @@ button:hover {
 
 .board-cont {
   text-align: center;
-  margin: 3em 0;
+  margin: 1em 0;
 }
 
 .board-link {

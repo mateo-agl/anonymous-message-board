@@ -1,47 +1,26 @@
 import { useState } from "react";
-import { ReportBtn, DeleteForm } from "../subComponents";
 
 export const Reply = ({
-	deleteElement,
+	DeleteForm,
+	ReportBtn,
 	url,
 	thread,
 	rep,
 	delRepFromState,
-	index,
-	reportElement,
+	index
 }) => {
 	const [repPassword, setRepPword] = useState("");
 
-	const sendDelRepReq = () => {
-		deleteElement(
-			url,
-			{
-				thread_id: thread._id,
-				reply_id: rep._id,
-				delete_password: repPassword
-			},
-			data => {
-				if (data) {
-					delRepFromState(index);
-					setRepPword("");
-					return;
-				} 
-				alert("Incorrect password");
-			}
-		);
+	const delAction = data => {
+		if (data) {
+			delRepFromState(index);
+			setRepPword("");
+			return;
+		} 
+		alert("Incorrect password");
 	};
 
 	const handleRepPword = e => setRepPword(e.target.value);
-
-	const sendReportRepReq = () => {
-		reportElement(
-			url,
-			{ 
-				thread_id: thread._id,
-				reply_id: rep._id
-			}
-		);
-	};
 	return (
 		<div className="reply">
 			<div className="actions-cont">
@@ -49,11 +28,23 @@ export const Reply = ({
 					{`id: ${rep._id} (${rep.created_on})`}
 				</label>
 				<div>
-					<ReportBtn sendReportReq={sendReportRepReq}/>
+					<ReportBtn 
+						reqBody={{ 
+							thread_id: thread._id,
+							reply_id: rep._id
+						}}
+						url={url}
+					/>
 					<DeleteForm
+						action={delAction}
 						deletePassword={repPassword}
 						handlePassword={handleRepPword}
-						sendDelReq={sendDelRepReq}
+						reqBody={{
+							thread_id: thread._id,
+							reply_id: rep._id,
+							delete_password: repPassword
+						}}
+						url={url}
 					/>
 				</div>
 			</div>

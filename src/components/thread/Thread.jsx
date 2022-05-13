@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { ReportBtn, CreateForm, DeleteForm } from "../subComponents";
 import { Reply } from "./Reply";
 
 export const Thread = ({
-	fetchData,
-	reportElement,
-	deleteElement,
-	createElement
+	CreateForm,
+	DeleteForm,
+	ReportBtn,
+	fetchData
 }) => {
 	const [thread, setThread] = useState("");
 	const currentURL = window.location.pathname.split("/");
@@ -47,44 +46,22 @@ export const Thread = ({
 		});
 	};
 
-	const sendReportThreatReq = () => {
-		reportElement(
-			threadsUrl,
-			{ thread_id: thread._id }
-		);
+	const delAction = data => {
+		if (data) return (location.pathname = `/b/${currentURL[2]}`);
+		alert("Incorrect password");
 	};
 	
-	const sendDelThreadReq = () => {
-		deleteElement(
-			threadsUrl,
-			{
+	const createAction = rep => {
+		setThread({
+			...thread,
+			replies: [rep, ...thread.replies],
+			newRep: {
 				thread_id: thread._id,
-				delete_password: thread.delete_password
-			},
-			data => {
-				if (data) return (window.location.pathname = `/b/${currentURL[2]}`);
-				alert("Incorrect password");
+				quick_reply: true,
+				text: "",
+				delete_password: ""
 			}
-		);
-	};
-		
-	const sendNewRepReq = () => {
-		createElement(
-			repliesUrl,
-			thread.newRep,
-			rep => {
-				setThread({
-					...thread,
-					replies: [rep, ...thread.replies],
-					newRep: {
-						thread_id: thread._id,
-						quick_reply: true,
-						text: "",
-						delete_password: ""
-					}
-				});
-			}
-		);
+		});
 	};
 
 	const delRepFromState = index => {
@@ -96,6 +73,19 @@ export const Thread = ({
 	if(!thread) return "";
 	return (
 		<div className="container">
+			<div className="board-cont">
+				<a
+					className="board-link home"
+					onClick={() => {location.pathname = ""}}
+				>
+					Home
+				</a>
+				<a className="board-link" href="/b/games">Games</a>
+				<a className="board-link" href="/b/technology">Technology</a>
+				<a className="board-link" href="/b/politics">Politics</a>
+				<a className="board-link" href="/b/animation">Animation</a>
+				<a className="board-link" href="/b/food">Food</a>
+			</div>
 			<header>
 				<h1 className="title">{thread._id}</h1>
 			</header>
@@ -105,11 +95,19 @@ export const Thread = ({
 						{thread.created_on}
 					</label>
 					<div>
-						<ReportBtn sendReportReq={sendReportThreatReq}/>
+						<ReportBtn
+							reqBody={{ thread_id: thread._id }}
+							url={threadsUrl}
+						/>
 						<DeleteForm
+							action={delAction}
 							deletePassword={thread.delete_password}
 							handlePassword={handleThreadPassword}
-							sendDelReq={sendDelThreadReq}
+							reqBody={{
+								thread_id: thread._id,
+								delete_password: thread.delete_password
+							}}
+							url={threadsUrl}
 						/>
 					</div>
 				</div>
@@ -117,11 +115,13 @@ export const Thread = ({
 				<hr/>
 				<div className="form-cont">
 					<CreateForm
+						action={createAction}
 						deletePassword={thread.newRep.delete_password}
 						handleData={handleNewRep}
-						placeholder={"Reply"}
-						sendNewEleReq={sendNewRepReq}
+						placeholder={"Quick Reply"}
+						reqBody={thread.newRep}
 						text={thread.newRep.text}
+						url={repliesUrl}
 					/>
 				</div>
 				<div className="replies">
@@ -130,11 +130,11 @@ export const Thread = ({
 							(rep, i) =>
 								<div key={i}>
 									<Reply
+										DeleteForm={DeleteForm}
+										ReportBtn={ReportBtn}
 										delRepFromState={delRepFromState}
-										deleteElement={deleteElement}
 										index={i}
 										rep={rep}
-										reportElement={reportElement}
 										thread={thread}
 										url={repliesUrl}
 									/>

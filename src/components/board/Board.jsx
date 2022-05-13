@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
-import { CreateForm } from "../subComponents";
 import { Thread } from "./thread/Thread.jsx";
 
 export const Board = ({
-	fetchData,
-	createElement,
-	deleteElement,
-	reportElement
+	CreateForm,
+	DeleteForm,
+	ReportBtn,
+	fetchData
 }) => {
 	const [data, setData] = useState("");
 	const currentBoard = window.location.pathname.slice(3);
@@ -36,21 +35,15 @@ export const Board = ({
 		});
 	};
 
-	const sendCreateReq = () => {
-		createElement(
-			url,
-			data.newThread,
-			newData => {
-				setData({
-					threads: [newData, ...data.threads],
-					newThread: {
-						board: currentBoard,
-						delete_password: "",
-						text: ""
-					}
-				});
+	const createAction = newData => {
+		setData({
+			threads: [newData, ...data.threads],
+			newThread: {
+				board: currentBoard,
+				delete_password: "",
+				text: ""
 			}
-		);
+		});
 	};
 
 	const delFromState = index => {
@@ -61,10 +54,23 @@ export const Board = ({
 			threads: newThreads
 		});
 	};
-
+	
 	if(!data) return "";
 	return (
 		<div className="container">
+			<div className="board-cont">
+				<a
+					className="board-link home"
+					onClick={() => {location.pathname = ""}}
+				>
+					Home
+				</a>
+				<a className="board-link" href="/b/games">Games</a>
+				<a className="board-link" href="/b/technology">Technology</a>
+				<a className="board-link" href="/b/politics">Politics</a>
+				<a className="board-link" href="/b/animation">Animation</a>
+				<a className="board-link" href="/b/food">Food</a>
+			</div>
 			<header>
 				<h1 className="title">{title}</h1>
 			</header>
@@ -72,11 +78,13 @@ export const Board = ({
 				<h3>Submit a new thread:</h3>
 				<div className="form-cont">
 					<CreateForm
+						action={createAction}
 						deletePassword={data.newThread.delete_password}
 						handleData={handleNewThreadData}
-						placeholder={"Thread"}
-						sendNewEleReq={sendCreateReq}
+						placeholder={"Quick Thread"}
+						reqBody={data.newThread}
 						text={data.newThread.text}
+						url={url}
 					/>
 				</div>
 			</div>
@@ -86,10 +94,11 @@ export const Board = ({
 					(ele, i) => (
 						<div key={i}>
 							<Thread 
+								CreateForm={CreateForm}
+								DeleteForm={DeleteForm}
+								ReportBtn={ReportBtn}
 								delFromState={delFromState}
-								deleteElement={deleteElement}
 								index={i}
-								reportElement={reportElement}
 								thread={ele}
 								url={url}
 							/>
