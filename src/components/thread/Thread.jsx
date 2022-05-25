@@ -76,7 +76,7 @@ export const Thread = ({
 			<div className="board-cont">
 				<a
 					className="board-link home"
-					onClick={() => {location.pathname = ""}}
+					onClick={() => {location.pathname = "";}}
 				>
 					Home
 				</a>
