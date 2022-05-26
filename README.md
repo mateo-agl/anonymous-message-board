@@ -1,5 +1,5 @@
 ﻿# Anonymous Message Board
-Demo: https://anonymous-message-board.mateo-agl.repl.co/
+Demo: https://anon-m-board.herokuapp.com
 
 ## Installation
 
@@ -15,7 +15,7 @@ Create an .env file and paste this variables in it:
 ```
 MODE=
 URI=
-SERVER_PORT=
+PORT=
 ```
 Now you can set the mode to production or development, set the port to 5000 or any other port and add your DB URI.
 
