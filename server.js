@@ -14,7 +14,6 @@ import { StaticRouter } from "react-router-dom/server";
 const app = express();
 
 if(process.env.MODE === "production") {
-  console.log("########################################################")
   app.use("/b/*", (req, res) => {
     fs.readFile(path.resolve("./build/index.html"), "utf-8", (err, data) => {
       if (err) {
@@ -29,7 +28,7 @@ if(process.env.MODE === "production") {
       );
     });
   });
-  app.use(express.static("build"));
+  app.use(express.static("./build"));
 } else {
   app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -54,8 +53,8 @@ apiRoutes(app);
 mongoose
   .connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    const listener = app.listen(process.env.SERVER_PORT || 3000, () => {
-      console.log("Your app is running on port " + listener.address().port);
+    const listener = app.listen(process.env.SERVER_PORT || 8080, () => {
+      console.log("Listening on port " + listener.address().port);
     });
   })
   .catch((e) => console.error(e));
