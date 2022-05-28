@@ -1,7 +1,8 @@
 const {
   createThread,
   createReply,
-  findThreads,
+  findRecentThreads,
+  findThreadsByBoard,
   findReplies,
   deleteThread,
   deleteReply,
@@ -9,7 +10,11 @@ const {
   reportReply,
 } = require("../mongoose.js");
 
-const apiRoutes = (app) => {
+const apiRoutes = app => {
+  app
+    .route("/api/threads/")
+    .get((req, res) => findRecentThreads(arr => res.send(arr)));
+
   app
     .route("/api/threads/:board")
     .post((req, res) => {
@@ -18,10 +23,10 @@ const apiRoutes = (app) => {
         res.json(doc);
       });
     })
-    .get((req, res) => findThreads(req.params.board, (arr) => res.send(arr)))
+    .get((req, res) => findThreadsByBoard(req.params.board, arr => res.send(arr)))
     .put((req, res) => {
       const b = req.body;
-      reportThread(b.thread_id, () => res.send("Thread successfully reported"));
+      reportThread(b.thread_id, () => res.send(b.thread_id));
     })
     .delete((req, res) => {
       const b = req.body;
@@ -42,9 +47,7 @@ const apiRoutes = (app) => {
     .get((req, res) => findReplies(req.query.thread_id, (doc) => res.json(doc)))
     .put((req, res) => {
       const b = req.body;
-      reportReply(b.thread_id, b.reply_id, () =>
-        res.send("Reply successfully reported")
-      );
+      reportReply(b.thread_id, b.reply_id, () => res.send(b.reply_id));
     })
     .delete((req, res) => {
       const b = req.body;

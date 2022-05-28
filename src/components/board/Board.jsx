@@ -10,7 +10,7 @@ export const Board = ({
 	const [data, setData] = useState("");
 	const currentBoard = window.location.pathname.slice(3);
 	const url = process.env.NODE_ENV === "development"
-		? `http://localhost:5000/api/threads/${currentBoard}`
+		? `http://localhost:8080/api/threads/${currentBoard}`
 		: `/api/threads/${currentBoard}`;
 	const title = `Welcome to ${currentBoard}`;
 	
@@ -72,7 +72,7 @@ export const Board = ({
 				<a className="board-link" href="/b/food">Food</a>
 			</div>
 			<header>
-				<h1 className="title">{title}</h1>
+				<h1>{title}</h1>
 			</header>
 			<div id="submitNewThread">
 				<h3>Submit a new thread:</h3>

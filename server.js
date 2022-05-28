@@ -53,7 +53,7 @@ apiRoutes(app);
 mongoose
   .connect(process.env.URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    const listener = app.listen(process.env.PORT || 8080, () => {
+    const listener = app.listen(process.env.SERVER_PORT || 8080, () => {
       console.log("Listening on port " + listener.address().port);
     });
   })

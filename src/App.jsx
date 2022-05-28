@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Route, Routes } from "react-router-dom";
 import { Main, Board, Thread } from "./components";
 import axios from 'axios';
@@ -12,15 +12,41 @@ const App = () => {
 	};
 
 	const ReportBtn = ({url, reqBody}) => {
+		const [btn, setBtn] = useState({text: "Report", class: ""});
+		const id = reqBody.reply_id ? reqBody.reply_id : reqBody.thread_id;
+
+		useEffect(() => {
+			const reportedList = localStorage.getItem("reported");
+			if(reportedList) {
+				const state = JSON.parse(reportedList).includes(id)
+					? {text: "Reported", class: "reported"}
+					: {text: "Report", class: ""};
+				setBtn(state);
+			};
+		}, []);
+
 		const sendReportReq = () => axios.put(url, reqBody)
-			.then(res => alert(res.data))
+			.then(() => {
+				const reportedList = localStorage.getItem("reported");
+				let newState = {};
+				let newList = [];
+				if(btn.text === "Report") {
+					newState = {text: "Reported", class: "reported"};
+					newList = reportedList ? [...JSON.parse(reportedList), id] : [id];
+				} else {
+					newState = {text: "Report", class: ""};
+					newList = JSON.parse(reportedList).filter(i => i !== id);
+				}
+				setBtn(newState);
+				localStorage.setItem("reported", JSON.stringify(newList));
+			})
 			.catch(err => console.error(err));
 		return (
 			<button
-				className="rep-btn reportThread"
+				className={`rep-btn reportThread ${btn.class}`}
 				onClick={sendReportReq}
 			>
-				Report
+				{btn.text}
 			</button>
 		);
 	};
@@ -94,7 +120,12 @@ const App = () => {
 		<Routes>
 			<Route path="/">
 				<Route
-					element={<Main CreateForm={CreateForm}/>}
+					element={
+						<Main 
+							CreateForm={CreateForm}
+							fetchData={fetchData}
+						/>
+					}
 					index
 				/>
 				<Route

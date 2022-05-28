@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-export const Main = ({CreateForm}) => {
+export const Main = ({CreateForm, fetchData}) => {
 	const [newThread, setNewThread] = useState(
 		{
 			board: "",
 			delete_password: "",
-			text: ""
+			text: "",
+			threads: []
 		}
 	);
+
+	const threadsUrl = process.env.NODE_ENV === "development"
+		? "http://localhost:8080/api/threads/"
+		: "api/threads/";
+
+	const getRecentThreads = data => setNewThread({ ...newThread, threads: data });
+
+	useEffect(() => fetchData(threadsUrl, getRecentThreads));
 
 	const handleNewThreadData = e => {
 		setNewThread({
@@ -20,14 +29,14 @@ export const Main = ({CreateForm}) => {
 		if (data) window.location.href = `b/${data.board}/${data._id}`;
 	};
 
-	const url = process.env.NODE_ENV === "development"
-		? `http://localhost:5000/api/threads/${newThread.board}`
+	const newThreadUrl = process.env.NODE_ENV === "development"
+		? `http://localhost:8080/api/threads/${newThread.board}`
 		: `api/threads/${newThread.board}`;
 	
 	return (
 		<div className="container">
 			<header>
-				<h1 className="main-title title">Anonymous Message Board</h1>
+				<h1 className="main-title">Anonymous Message Board</h1>
 			</header>
 			<div className="board-cont">
 				<h2>Boards</h2>
@@ -38,7 +47,6 @@ export const Main = ({CreateForm}) => {
 				<a className="board-link" href="/b/food">Food</a>
 			</div>
 			<div className="form-cont">
-				<h4>New thread (POST /api/threads/:board)</h4>
 				<CreateForm
 					action={createAction}
 					deletePassword={newThread.delete_password}
@@ -46,10 +54,39 @@ export const Main = ({CreateForm}) => {
 					placeholder={"Thread text..."}
 					reqBody={newThread}
 					text={newThread.text}
-					url={url}
+					url={newThreadUrl}
 				>
 					<input name="board" placeholder="board" required onChange={handleNewThreadData}/>
 				</CreateForm>
+			</div>
+			<div id="recent-threads">
+				<h2>Threads sorted by most recent</h2>
+				{
+					newThread.threads.map((t, i) => 
+						<a 
+							className="main-thread"
+							href={`/b/${t.board}/${t._id}`}
+							key={i}
+						>
+							<div className="thread-cont">
+								<div className="thread">
+									<div className="actions-cont">
+										<a href={`/b/${t.board}`}>
+											{t.board}
+										</a>
+										<label className="id">
+											{`id: ${t._id} (${new Date(t.created_on).toLocaleDateString()})`}
+										</label>
+									</div>
+									<p>{t.text}</p>
+								</div>
+								<h5 className="thread-link">
+									{`${t.replies.length} replies`}
+								</h5>
+							</div>
+						</a>
+					)
+				}
 			</div>
 		</div>
 	);

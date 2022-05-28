@@ -59,7 +59,18 @@ const createReply = (text, password, thread_id, done) => {
   });
 };
 
-const findThreads = (board, done) => {
+const findRecentThreads = done => {
+  Threads
+    .find()
+    .limit(10)
+    .sort("-created_on")
+    .exec((err, arr) => {
+      if (err) return console.error(err);
+      done(arr);
+    });
+};
+
+const findThreadsByBoard = (board, done) => {
   Threads.find({ board: board })
     .select(
       "-reported -delete_password -replies.reported -replies.delete_password"
@@ -142,7 +153,8 @@ const reportReply = (thread_id, reply_id, done) => {
 module.exports = {
   createThread,
   createReply,
-  findThreads,
+  findRecentThreads,
+  findThreadsByBoard,
   findReplies,
   deleteThread,
   deleteReply,

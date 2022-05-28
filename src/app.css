@@ -9,8 +9,45 @@ html {
   background-color: hsl(0, 0%, 10%);
 }
 
+h1 {
+  font-size: 3em;
+}
+
 h2 {
   font-size: 2em;
+}
+
+.board-cont {
+  text-align: center;
+  margin: 1em 0;
+}
+
+.board-link {
+  display: inline-flex;
+  margin: 1em;
+}
+
+#recent-threads {
+  width: fit-content;
+  margin: auto;
+}
+
+.main-thread {
+  text-decoration: none;
+}
+
+.main-thread .thread-cont {
+  margin: 1em 0;
+  border: hsl(0, 0%, 20%) .5px solid;
+  border-radius: 3px;
+}
+
+.main-thread:hover .thread-cont {
+  background: hsl(0, 0%, 20%);
+}
+
+.main-thread .thread-cont .id {
+  cursor: pointer;
 }
 
 label {
@@ -32,10 +69,6 @@ hr {
 
 .home {
   cursor: pointer;
-}
-
-.title {
-  font-size: 3em;
 }
 
 .main-title {
@@ -89,7 +122,12 @@ button:hover {
 .thread-cont {
   padding: 1em;
 }
-.replies {height:100px;margin: 5em}
+
+.replies {
+  height: 100px;
+  margin: 5em;
+}
+
 .thread, .thread-link {
   margin-bottom: 1em;
 }
@@ -113,16 +151,20 @@ button:hover {
   margin-right: 1em;
 }
 
+.reported {
+  background-color: hsl(0, 0%, 40%);
+}
+
 .reply {
   padding: 1em;
 }
 
-.board-cont {
-  text-align: center;
-  margin: 1em 0;
-}
+@media (max-width: 304px) {
+  h1 {
+    font-size: 2em;
+  }
 
-.board-link {
-  display: inline-block;
-  margin: 0 1em;
+  h2 {
+    font-size: 1.2em;
+  }
 }
