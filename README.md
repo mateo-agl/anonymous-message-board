@@ -17,12 +17,12 @@ MODE=
 URI=
 PORT=
 ```
-Now you can set the mode to production or development, set the port to 5000 or any other port and add your DB URI.
+Now you can set the mode to production or development, set the port to 8080 or any other port and add your DB URI.
 
 ## Scripts
 
 ### npm start
-To run the server in http://localhost:5000.
+To run the server in http://localhost:8080.
 
 ### npm run client
 To run the react app in development mode.
