@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Reply } from "./Reply";
 
 export const Thread = ({
@@ -16,7 +17,9 @@ export const Thread = ({
 		? `http://localhost:8080/api/threads/${currentURL[2]}`
 		: `/api/threads/${currentURL[2]}`;
 	
-	useEffect(() => fetchData(repliesUrl, data => {
+	useEffect(() => fetchData(repliesUrl, getThreadData), []);
+
+	const getThreadData = data => {
 		setThread({
 			...data,
 			delete_password: "",
@@ -27,7 +30,7 @@ export const Thread = ({
 				delete_password: ""
 			}
 		});
-	}), []);
+	};
 
 	const handleNewRep = e => {
 		setThread({
@@ -47,7 +50,7 @@ export const Thread = ({
 	};
 
 	const delAction = data => {
-		if (data) return (location.pathname = `/b/${currentURL[2]}`);
+		if (data) return history.back();
 		alert("Incorrect password");
 	};
 	
@@ -74,17 +77,12 @@ export const Thread = ({
 	return (
 		<div className="container">
 			<div className="board-cont">
-				<a
-					className="board-link home"
-					onClick={() => {location.pathname = "";}}
-				>
-					Home
-				</a>
-				<a className="board-link" href="/b/games">Games</a>
-				<a className="board-link" href="/b/technology">Technology</a>
-				<a className="board-link" href="/b/politics">Politics</a>
-				<a className="board-link" href="/b/animation">Animation</a>
-				<a className="board-link" href="/b/food">Food</a>
+				<Link className="board-link home" to="/">Home</Link>
+				<Link className="board-link" to="/b/games">Games</Link>
+				<Link className="board-link" to="/b/technology">Technology</Link>
+				<Link className="board-link" to="/b/politics">Politics</Link>
+				<Link className="board-link" to="/b/animation">Animation</Link>
+				<Link className="board-link" to="/b/food">Food</Link>
 			</div>
 			<header>
 				<h1>{thread._id}</h1>

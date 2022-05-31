@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Reply } from "./Reply";
 
 export const Thread = ({
@@ -54,18 +55,10 @@ export const Thread = ({
 			</div>
 			<h5 className="thread-link">
 				{`${thread.replies.length} replies total (${hiddenCount} hidden)- `}
-				<a href={`${thread.board}/${thread._id}`}>
-					See the full thread here.
-				</a>
+				<Link to={`${thread._id}`}>See the full thread here.</Link>
 			</h5>
 			{
-				replies.map(
-					(rep, i) =>
-						<Reply
-							key={i}
-							rep={rep}
-						/>
-				)
+				replies.map((rep, i) => <Reply key={i} rep={rep} />)
 			}
 		</div>
 	);

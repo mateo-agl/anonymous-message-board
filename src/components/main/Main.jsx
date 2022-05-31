@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export const Main = ({CreateForm, fetchData}) => {
 	const [newThread, setNewThread] = useState(
@@ -40,11 +41,11 @@ export const Main = ({CreateForm, fetchData}) => {
 			</header>
 			<div className="board-cont">
 				<h2>Boards</h2>
-				<a className="board-link" href="/b/games">Games</a>
-				<a className="board-link" href="/b/technology">Technology</a>
-				<a className="board-link" href="/b/politics">Politics</a>
-				<a className="board-link" href="/b/animation">Animation</a>
-				<a className="board-link" href="/b/food">Food</a>
+				<Link className="board-link" to="/b/games">Games</Link>
+				<Link className="board-link" to="/b/technology">Technology</Link>
+				<Link className="board-link" to="/b/politics">Politics</Link>
+				<Link className="board-link" to="/b/animation">Animation</Link>
+				<Link className="board-link" to="/b/food">Food</Link>
 			</div>
 			<div className="form-cont">
 				<CreateForm
@@ -63,17 +64,15 @@ export const Main = ({CreateForm, fetchData}) => {
 				<h2>Threads sorted by most recent</h2>
 				{
 					newThread.threads.map((t, i) => 
-						<a 
+						<Link 
 							className="main-thread"
-							href={`/b/${t.board}/${t._id}`}
 							key={i}
+							to={`b/${t.board}/${t._id}`}
 						>
 							<div className="thread-cont">
 								<div className="thread">
 									<div className="actions-cont">
-										<a href={`/b/${t.board}`}>
-											{t.board}
-										</a>
+										<Link to={`b/${t.board}`}>{t.board}</Link>
 										<label className="id">
 											{`id: ${t._id} (${new Date(t.created_on).toLocaleDateString()})`}
 										</label>
@@ -84,7 +83,7 @@ export const Main = ({CreateForm, fetchData}) => {
 									{`${t.replies.length} replies`}
 								</h5>
 							</div>
-						</a>
+						</Link>
 					)
 				}
 			</div>
