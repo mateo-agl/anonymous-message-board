@@ -15,9 +15,7 @@ export const Board = ({
 		: `/api/threads/${currentBoard}`;
 	const title = `Welcome to ${currentBoard}`;
 	
-	useEffect(() => fetchData(url, getBoardThreads), [setData]);
-
-	const getBoardThreads = data => {
+	useEffect(() => fetchData(url, data => {
 		setData({
 			threads: data,
 			newThread: {
@@ -26,7 +24,7 @@ export const Board = ({
 				text: ""
 			}
 		});
-	};
+	}), [setData]);
 
 	const handleNewThreadData = e => {
 		setData({
@@ -62,12 +60,12 @@ export const Board = ({
 	return (
 		<div className="container">
 			<div className="board-cont">
-				<Link className="board-link home" to="/">Home</Link>
-				<Link className="board-link" to="/b/games">Games</Link>
-				<Link className="board-link" to="/b/technology">Technology</Link>
-				<Link className="board-link" to="/b/politics">Politics</Link>
-				<Link className="board-link" to="/b/animation">Animation</Link>
-				<Link className="board-link" to="/b/food">Food</Link>
+				<a className="board-link home" href="/">Home</a>
+				<a className="board-link" href="/b/games">Games</a>
+				<a className="board-link" href="/b/technology">Technology</a>
+				<a className="board-link" href="/b/politics">Politics</a>
+				<a className="board-link" href="/b/animation">Animation</a>
+				<a className="board-link" href="/b/food">Food</a>
 			</div>
 			<header>
 				<h1>{title}</h1>

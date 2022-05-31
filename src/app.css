@@ -36,17 +36,18 @@ h2 {
   text-decoration: none;
 }
 
-.main-thread .thread-cont {
+.main-thread {
   margin: 1em 0;
   border: hsl(0, 0%, 20%) .5px solid;
   border-radius: 3px;
+  cursor: pointer;
 }
 
-.main-thread:hover .thread-cont {
+.main-thread:hover {
   background: hsl(0, 0%, 20%);
 }
 
-.main-thread .thread-cont .id {
+.main-thread .id {
   cursor: pointer;
 }
 
