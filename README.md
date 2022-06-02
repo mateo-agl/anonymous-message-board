@@ -15,7 +15,6 @@ Create an .env file and paste this variables in it:
 ```
 MODE=
 URI=
-PORT=
 ```
 Now you can set the mode to production or development, set the port to 8080 or any other port and add your DB URI.
 
