@@ -6,16 +6,16 @@ Demo: https://anon-m-board.herokuapp.com
 Para iniciar esta app localmente debes tener una base de datos en MongoDB.
 
 Clona el repositorio
-``
+```
 git clone https://github.com/mateo-agl/anonymous-message-board.git
 cd anonymous-message-board
 npm install
-``
+```
 Crea un archivo .env y escribe las siguientes variable:
-``
+```
 MODE=
 URI=
-``
+```
 MODE puede ser igual a `production` (inicia la app desde el servidor) o `development` (el servidor y la parte del client se inician por separado). Para iniciar la app necesitas la URI de tu base de datos.
 
 ## Scripts
