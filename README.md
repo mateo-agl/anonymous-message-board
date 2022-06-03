@@ -1,37 +1,36 @@
 ﻿# Anonymous Message Board
 Demo: https://anon-m-board.herokuapp.com
 
-## Installation
+## Instalación
 
-To run this app locally you have to create a DB in MongoDB.
+Para iniciar esta app localmente debes tener una base de datos en MongoDB.
 
-Clone repository
-```
+Clona el repositorio
+`
 git clone https://github.com/mateo-agl/anonymous-message-board.git
 cd anonymous-message-board
 npm install
-```
-Create an .env file and paste this variables in it:
-```
+`
+Crea un archivo .env y escribe las siguientes variable:
+`
 MODE=
 URI=
-```
-Now you can set the mode to production or development, set the port to 8080 or any other port and add your DB URI.
+`
+MODE puede ser igual a `production` (inicia la app desde el servidor) o `development` (el servidor y la parte del client se inician por separado). Para iniciar la app necesitas la URI de tu base de datos.
 
 ## Scripts
 
 ### npm start
-To run the server in http://localhost:8080.
+Para iniciar el servidor en http://localhost:8080.
 
 ### npm run client
-To run the react app in development mode.
-Open http://localhost:3000 to view it in the browser.
+Para iniciar el servidor de desarrollo en http://localhost:3000.
 
 ### npm run build
-Builds the app for production.
+Arma el bundle de la app para poder iniciarla en modo de producción.
 
 ### npm run lint
-To check if the code follows the eslint rules.
+Para ver si el código sigue las reglas de eslint.
 
 ### npm run lint:fix
-To fix errors (if possible) in the code.
+Para modificar la parte del código que no siga las reglas.
