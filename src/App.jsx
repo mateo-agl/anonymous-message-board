@@ -112,13 +112,18 @@ const App = () => {
 		action
 	}) => {
 		const sendNewEleReq = () => {
+			if(children) {
+				if(!deletePassword || !text || !reqBody.board) return;	
+			}
 			if(!deletePassword || !text) return;
 			axios.post(url, reqBody)
 				.then(res => action(res.data))
 				.catch(err => console.error(err));
 		};
-
-		const enableBtn = deletePassword && text ? "enabled" : "";
+		
+		const enableBtn = children
+			? deletePassword && text && reqBody.board ? "enabled" : ""
+			: deletePassword && text ? "enabled" : "";
 
 		return (
 			<form>
