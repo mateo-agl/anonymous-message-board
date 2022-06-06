@@ -138,10 +138,11 @@ const App = () => {
 					onChange={handleData}
 				/>
 				<button
+					className={`post-btn ${enableBtn}`}
 					type="button"
 					onClick={sendNewEleReq}
 				>
-					Submit
+					Post
 				</button>
 			</form>
 		);
@@ -182,7 +183,7 @@ const App = () => {
 					path="b/:board/:thread"
 				/>
 			</Route>
-		</Routes>
+		</Routes>		
 	);
 };
 
