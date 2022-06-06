@@ -52,26 +52,52 @@ const App = () => {
 	};
 
 	const DeleteForm = ({deletePassword, handlePassword, url, reqBody, action}) => {
-		const sendDelReq = () => axios.delete(url, { data: reqBody })
-			.then(res => action(res.data))
-			.catch(err => console.error(err));
+		const [formClass, setFormClass] = useState("");
+
+		const sendDelReq = () => {
+			if (!deletePassword) return alert("The password input is empty.");
+			axios.delete(url, { data: reqBody })
+				.then(res => {
+					changeClass();
+					action(res.data);
+				})
+				.catch(err => console.error(err));
+		};
+
+		const changeClass = () => {
+			const className = !formClass ? "show" : "";
+			setFormClass(className);
+		};
+
 		return (
-			<form className="del-form">
-				<input 
-					className="del-input"
-					placeholder="password"
-					required
-					value={deletePassword}
-					onChange={handlePassword}
-				/>
+			<>
+				<div className={`del form-cont ${formClass}`}>
+					<form className="del-form">
+						<input 
+							className="del-input"
+							placeholder="password"
+							required
+							type="password"
+							value={deletePassword}
+							onChange={handlePassword}
+						/>
+						<button 
+							className="submit-password"
+							type="button"
+							onClick={sendDelReq}
+						>
+							Submit
+						</button>
+					</form>
+				</div>
 				<button 
 					className="del-btn"
 					type="button"
-					onClick={sendDelReq}
+					onClick={changeClass}
 				>
 					Delete
 				</button>
-			</form>
+			</>
 		);
 	};
 
@@ -85,10 +111,15 @@ const App = () => {
 		reqBody,
 		action
 	}) => {
-		const sendNewEleReq = () => axios.post(url, reqBody)
-			.then(res => action(res.data))
-			.catch(err => console.error(err));
-		
+		const sendNewEleReq = () => {
+			if(!deletePassword || !text) return;
+			axios.post(url, reqBody)
+				.then(res => action(res.data))
+				.catch(err => console.error(err));
+		};
+
+		const enableBtn = deletePassword && text ? "enabled" : "";
+
 		return (
 			<form>
 				{children}

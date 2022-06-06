@@ -10,12 +10,12 @@ export const Thread = ({
 }) => {
 	const [thread, setThread] = useState("");
 	const currentURL = window.location.pathname.split("/");
-	const repliesUrl = process.env.NODE_ENV === "development"
-		? `http://localhost:8080/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`
-		: `/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`;
-	const threadsUrl = process.env.NODE_ENV === "development"
-		? `http://localhost:8080/api/threads/${currentURL[2]}`
-		: `/api/threads/${currentURL[2]}`;
+	const devHostName = "http://localhost:8080";
+	const devMode = process.env.NODE_ENV === "development";
+	const repliesUrl = `${devMode ? devHostName : ""}/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`;
+	const threadsUrl = `${devMode ? devHostName : ""}/api/threads/${currentURL[2]}`;
+
+	const threadDate = new Date(thread.created_on).toLocaleString().slice(0,-3);
 	
 	useEffect(() => fetchData(repliesUrl, getThreadData), []);
 
@@ -77,7 +77,7 @@ export const Thread = ({
 	return (
 		<div className="container">
 			<div className="board-cont">
-				<Link className="board-link home" to="/">Home</Link>
+				<Link className="board-link" to="/">Home</Link>
 				<Link className="board-link" to="/b/games">Games</Link>
 				<Link className="board-link" to="/b/technology">Technology</Link>
 				<Link className="board-link" to="/b/politics">Politics</Link>
@@ -85,31 +85,27 @@ export const Thread = ({
 				<Link className="board-link" to="/b/food">Food</Link>
 			</div>
 			<header>
-				<h1>{thread._id}</h1>
+				<h2>{thread._id}</h2>
+				<label>{threadDate}</label>
 			</header>
 			<div className="thread">
+				<p>{thread.text}</p>
 				<div className="actions-cont">
-					<label className="id">
-						{thread.created_on}
-					</label>
-					<div>
-						<ReportBtn
-							reqBody={{ thread_id: thread._id }}
-							url={threadsUrl}
-						/>
-						<DeleteForm
-							action={delAction}
-							deletePassword={thread.delete_password}
-							handlePassword={handleThreadPassword}
-							reqBody={{
-								thread_id: thread._id,
-								delete_password: thread.delete_password
-							}}
-							url={threadsUrl}
-						/>
-					</div>
+					<ReportBtn
+						reqBody={{ thread_id: thread._id }}
+						url={threadsUrl}
+					/>
+					<DeleteForm
+						action={delAction}
+						deletePassword={thread.delete_password}
+						handlePassword={handleThreadPassword}
+						reqBody={{
+							thread_id: thread._id,
+							delete_password: thread.delete_password
+						}}
+						url={threadsUrl}
+					/>
 				</div>
-				<h2>{thread.text}</h2>
 				<hr/>
 				<div className="form-cont">
 					<CreateForm
@@ -126,18 +122,16 @@ export const Thread = ({
 					{
 						thread.replies.map(
 							(rep, i) =>
-								<div key={i}>
-									<Reply
-										DeleteForm={DeleteForm}
-										ReportBtn={ReportBtn}
-										delRepFromState={delRepFromState}
-										index={i}
-										rep={rep}
-										thread={thread}
-										url={repliesUrl}
-									/>
-									<hr/>
-								</div>
+								<Reply
+									DeleteForm={DeleteForm}
+									ReportBtn={ReportBtn}
+									delRepFromState={delRepFromState}
+									index={i}
+									key={i}
+									rep={rep}
+									thread={thread}
+									url={repliesUrl}
+								/>
 						)
 					}
 				</div>

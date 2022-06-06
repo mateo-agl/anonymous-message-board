@@ -9,12 +9,12 @@ export const Board = ({
 	fetchData
 }) => {
 	const [data, setData] = useState("");
+	const devHostName = "http://localhost:8080";
 	const currentBoard = window.location.pathname.slice(3);
-	const url = process.env.NODE_ENV === "development"
-		? `http://localhost:8080/api/threads/${currentBoard}`
-		: `/api/threads/${currentBoard}`;
+	const url = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads/${currentBoard}`;
 	const title = `Welcome to ${currentBoard}`;
-	
+	const resetData = () => setData({...data});
+
 	useEffect(() => fetchData(url, data => {
 		setData({
 			threads: data,
@@ -24,7 +24,7 @@ export const Board = ({
 				text: ""
 			}
 		});
-	}), [setData]);
+	}), [setData, currentBoard]);
 
 	const handleNewThreadData = e => {
 		setData({
@@ -40,7 +40,7 @@ export const Board = ({
 		setData({
 			threads: [newData, ...data.threads],
 			newThread: {
-				board: currentBoard,
+				...data.newThread,
 				delete_password: "",
 				text: ""
 			}
@@ -60,12 +60,12 @@ export const Board = ({
 	return (
 		<div className="container">
 			<div className="board-cont">
-				<a className="board-link home" href="/">Home</a>
-				<a className="board-link" href="/b/games">Games</a>
-				<a className="board-link" href="/b/technology">Technology</a>
-				<a className="board-link" href="/b/politics">Politics</a>
-				<a className="board-link" href="/b/animation">Animation</a>
-				<a className="board-link" href="/b/food">Food</a>
+				<Link className="board-link" to="/">Home</Link>
+				<Link className="board-link" to="/b/games" onClick={resetData}>Games</Link>
+				<Link className="board-link" to="/b/technology" onClick={resetData}>Technology</Link>
+				<Link className="board-link" to="/b/politics" onClick={resetData}>Politics</Link>
+				<Link className="board-link" to="/b/animation" onClick={resetData}>Animation</Link>
+				<Link className="board-link" to="/b/food" onClick={resetData}>Food</Link>
 			</div>
 			<header>
 				<h1>{title}</h1>
@@ -88,18 +88,16 @@ export const Board = ({
 			{
 				data.threads.map(
 					(ele, i) => (
-						<div key={i}>
-							<Thread 
-								CreateForm={CreateForm}
-								DeleteForm={DeleteForm}
-								ReportBtn={ReportBtn}
-								delFromState={delFromState}
-								index={i}
-								thread={ele}
-								url={url}
-							/>
-							<hr/>
-						</div>
+						<Thread 
+							CreateForm={CreateForm}
+							DeleteForm={DeleteForm}
+							ReportBtn={ReportBtn}
+							delFromState={delFromState}
+							index={i}
+							key={i}
+							thread={ele}
+							url={url}
+						/>
 					)
 				)
 			}

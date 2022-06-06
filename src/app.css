@@ -2,19 +2,34 @@
   margin: 0px;
   padding: 0px;
   color: hsl(0, 0%, 90%);
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Noto Sans', Arial, sans-serif;
 }
 
 html {
   background-color: hsl(0, 0%, 10%);
 }
 
-h1 {
-  font-size: 3em;
+a {
+  text-decoration: none;
 }
 
-h2 {
-  font-size: 2em;
+a:hover {
+  text-decoration: underline;
+}
+
+hr {
+  border: hsl(0, 0%, 20%) .5px solid;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 600px;
+  margin: auto;
+}
+
+#search {
+  margin-top: 0;
 }
 
 .board-cont {
@@ -22,21 +37,33 @@ h2 {
   margin: 1em 0;
 }
 
+.board-cont .board-link {
+  margin: 1em;
+  background-color: hsl(0, 0%, 20%);
+  padding: 10px;
+  border-radius: 50px;
+}
+
 .board-link {
   display: inline-flex;
-  margin: 1em;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: IBMPlexSans, Arial, sans-serif;
+  z-index: 1;
 }
 
 #recent-threads {
-  width: fit-content;
+  max-width: 600px;
   margin: auto;
 }
 
-.main-thread {
-  text-decoration: none;
+.thread-data {
+  display: flex;
+  justify-content: space-between;
 }
 
 .main-thread {
+  position: relative;
   margin: 1em 0;
   border: hsl(0, 0%, 20%) .5px solid;
   border-radius: 3px;
@@ -49,6 +76,15 @@ h2 {
 
 .main-thread .id {
   cursor: pointer;
+  text-align: end;
+}
+
+.main-thread .thread-link {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
 label {
@@ -56,20 +92,7 @@ label {
   font-size: .8em;
   color: rgb(124, 124, 124);
   margin-bottom: 1em;
-}
-
-hr {
-  margin: 1em 0;
-}
-
-.container {
-  display: block;
-  width: 70%;
-  margin: auto;
-}
-
-.home {
-  cursor: pointer;
+  font-family: IBMPlexSans, Arial, sans-serif;
 }
 
 .main-title {
@@ -82,22 +105,30 @@ form {
 }
 
 .form-cont {
-  max-width: 600px;
   border: hsl(0, 0%, 20%) .5px solid;
   border-radius: 3px;
-  margin: 2em auto;
-  padding: 1em;
+  margin: 2em 0;
+  padding: .5em;
   background-color: hsl(0, 0%, 10%);
 }
 
 input, textarea, button {
   font-size: 1em;
-  padding: 0.7em;
-  margin-top: 0.7em;
-  margin-inline: 0.7em;
+  padding: .7em;
+  margin-top: .5em;
+  margin-inline: .7em;
   border: hsl(0, 0%, 25%) 1px solid;
   border-radius: 3px;
   background-color: hsl(0, 0%, 20%);
+  font-size: 14px;
+  font-family: IBMPlexSans, Arial, sans-serif;
+  outline: none;
+}
+
+button {
+  font-weight: 600;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 input:hover, textarea:hover {
@@ -116,6 +147,26 @@ button:hover {
   background-color: hsl(0, 0%, 40%);
 }
 
+.post-btn {
+  width: fit-content;
+  border-radius: 50px;
+  padding: .5em 2em;
+  margin-left: auto;
+  border: none;
+  color: hsl(0, 0%, 60%);
+  background-color: hsl(0, 0%, 90%);
+  cursor: not-allowed;
+}
+
+.post-btn.enabled {
+  color: hsl(0, 0%, 30%);
+  cursor: pointer;
+}
+
+.post-btn:hover {
+  background-color: hsl(0, 0%, 80%);
+}
+
 .newThread {
   margin: 1em 10%;
 }
@@ -124,28 +175,59 @@ button:hover {
   padding: 1em;
 }
 
-.replies {
-  height: 100px;
-  margin: 5em;
-}
-
 .thread, .thread-link {
   margin-bottom: 1em;
 }
 
-.actions-cont {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+.thread-link, .main-replies {
+  font-size: 12px;
+  font-family: IBMPlexSans, Arial, sans-serif;
 }
 
-.del-form {
+.reply {
+  padding: 1em;
+}
+
+.actions-cont {
+  display: flex;
+  position: relative;
+  margin: 1em 0 0 auto;
+}
+
+.del.form-cont {
+  display: none;
+  position: absolute;
+  top: 0;
+}
+
+.del.form-cont.show {
+  display: inline-block;
+}
+
+.submit-password {
+  width: fit-content;
+  border-radius: 50px;
+  padding: .5em 2em;
+  border: none;
+  background-color: hsl(0, 0%, 90%);
+  color: hsl(0, 0%, 30%);
+  margin-inline: auto;
+}
+
+.del-input {
   display: inline-block;
 }
 
 .del-btn, .rep-btn, .del-input {
   margin: 0;
   padding: 3px;
+  max-height: 26px;
+}
+
+.del-btn, .rep-btn {
+  background: none;
+  border: none;
+  line-height: 20px;
 }
 
 .reportThread {
@@ -154,10 +236,6 @@ button:hover {
 
 .reported {
   background-color: hsl(0, 0%, 40%);
-}
-
-.reply {
-  padding: 1em;
 }
 
 @media (max-width: 304px) {

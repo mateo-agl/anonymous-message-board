@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const Main = ({CreateForm, fetchData}) => {
 	const [newThread, setNewThread] = useState(
@@ -10,12 +10,9 @@ export const Main = ({CreateForm, fetchData}) => {
 			threads: []
 		}
 	);
-
-	const navigate = useNavigate();
-
-	const threadsUrl = process.env.NODE_ENV === "development"
-		? "http://localhost:8080/api/threads/"
-		: "api/threads/";
+	
+	const devHostName = "http://localhost:8080";
+	const threadsUrl = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads?limit=10`;
 
 	const getRecentThreads = data => setNewThread({ ...newThread, threads: data });
 
@@ -32,9 +29,7 @@ export const Main = ({CreateForm, fetchData}) => {
 		if (data) window.location.href = `b/${data.board}/${data._id}`;
 	};
 
-	const newThreadUrl = process.env.NODE_ENV === "development"
-		? `http://localhost:8080/api/threads/${newThread.board}`
-		: `api/threads/${newThread.board}`;
+	const newThreadUrl = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads/${newThread.board}`;
 	
 	return (
 		<div className="container">
@@ -69,20 +64,18 @@ export const Main = ({CreateForm, fetchData}) => {
 						<div
 							className="thread-cont main-thread"
 							key={i}
-							onClick={() => navigate(`b/${t.board}/${t._id}`)}
 						>
 							<div className="thread">
-								<div className="actions-cont">
-									<Link to={`b/${t.board}`}>{t.board}</Link>
+								<div className="thread-data">
+									<Link className="board-link" to={`b/${t.board}`}>{t.board}</Link>
 									<label className="id">
-										{`id: ${t._id} (${new Date(t.created_on).toLocaleDateString()})`}
+										{`id: ${t._id} (${new Date(t.created_on).toLocaleString().slice(0,-3)})`}
 									</label>
 								</div>
-								<p>{t.text}</p>
+								<p className="thread-text">{t.text}</p>
 							</div>
-							<h5 className="thread-link">
-								{`${t.replies.length} replies`}
-							</h5>
+							<p className="main-replies">{`${t.replies.length} replies`}</p>
+							<Link className="thread-link" to={`b/${t.board}/${t._id}`}/>
 						</div>
 					)
 				}
