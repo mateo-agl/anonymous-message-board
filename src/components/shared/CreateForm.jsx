@@ -37,27 +37,24 @@ export const CreateForm = ({ boardInput, board, placeholder, url, action, quick_
 	});
 
 	return (
-		<form>
+		<div className="form">
 			{
 				boardInput && 
 				<input 
 					name="board"
 					placeholder="board"
-					required
 					onChange={handleData}
 				/>
 			}
 			<textarea
 				name="text"
 				placeholder={placeholder}
-				required
 				value={newThread.text}
 				onChange={handleData}
 			/>
 			<input
 				name="delete_password"
 				placeholder="password to delete"
-				required
 				value={newThread.delete_password}
 				onChange={handleData}
 			/>
@@ -68,6 +65,6 @@ export const CreateForm = ({ boardInput, board, placeholder, url, action, quick_
 			>
 				Post
 			</button>
-		</form>
+		</div>
 	);
 };

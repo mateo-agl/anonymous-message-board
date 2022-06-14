@@ -16,11 +16,10 @@ export const DeleteForm = ({ url, reqBody, action, formClass, handleForm }) => {
 	return (
 		<>
 			<div className={`del form-cont ${formClass}`}>
-				<form className="del-form">
+				<div className="form">
 					<input 
 						className="del-input"
 						placeholder="password"
-						required
 						type="password"
 						value={password}
 						onChange={handlePassword}
@@ -32,7 +31,7 @@ export const DeleteForm = ({ url, reqBody, action, formClass, handleForm }) => {
 					>
 						Submit
 					</button>
-				</form>
+				</div>
 			</div>
 			<span 
 				className={`background ${formClass}`} 
