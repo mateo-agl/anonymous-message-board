@@ -1,33 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { CreateForm } from "../shared";
 
-export const Main = ({CreateForm, fetchData}) => {
-	const [newThread, setNewThread] = useState(
-		{
-			board: "",
-			delete_password: "",
-			text: "",
-			threads: []
-		}
-	);
+export const Main = ({fetchData}) => {
+	const [newThread, setNewThread] = useState({ threads: [] });
 	
 	const devHostName = "http://localhost:8080";
 	const threadsUrl = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads?limit=10`;
+
+	const navigate = useNavigate();
 
 	const getRecentThreads = data => setNewThread({ ...newThread, threads: data });
 
 	useEffect(() => fetchData(threadsUrl, getRecentThreads), []);
 
-	const handleNewThreadData = e => {
-		setNewThread({
-			...newThread,
-			[e.target.name]: e.target.value
-		});
-	};
-
-	const createAction = data => {
-		if (data) window.location.href = `b/${data.board}/${data._id}`;
-	};
+	const createAction = data => data && navigate(`b/${data.board}/${data._id}`);
 
 	const newThreadUrl = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads/${newThread.board}`;
 	
@@ -47,24 +34,16 @@ export const Main = ({CreateForm, fetchData}) => {
 			<div className="form-cont">
 				<CreateForm
 					action={createAction}
-					deletePassword={newThread.delete_password}
-					handleData={handleNewThreadData}
+					boardInput={true}
 					placeholder={"Thread text..."}
-					reqBody={newThread}
-					text={newThread.text}
 					url={newThreadUrl}
-				>
-					<input name="board" placeholder="board" required onChange={handleNewThreadData}/>
-				</CreateForm>
+				/>
 			</div>
 			<div id="recent-threads">
 				<h2>Threads sorted by most recent</h2>
 				{
 					newThread.threads.map((t, i) => 
-						<div
-							className="thread-cont main-thread"
-							key={i}
-						>
+						<div className="thread-cont main-thread" key={i}>
 							<div className="thread">
 								<div className="thread-data">
 									<Link className="board-link" to={`b/${t.board}`}>{t.board}</Link>

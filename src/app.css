@@ -28,8 +28,16 @@ hr {
   margin: auto;
 }
 
+#search-cont {
+  display: flex;
+  margin: 0;
+  padding: .8em;
+  justify-content: center;
+}
+
 #search {
-  margin-top: 0;
+  margin: 0;
+  width: 306px;
 }
 
 .board-cont {
@@ -60,6 +68,10 @@ hr {
 .thread-data {
   display: flex;
   justify-content: space-between;
+}
+
+.thread-text {
+  font-size: 14px;
 }
 
 .main-thread {
@@ -114,12 +126,12 @@ form {
 
 input, textarea, button {
   font-size: 1em;
-  padding: .7em;
+  padding: .6em .7em;
   margin-top: .5em;
   margin-inline: .7em;
-  border: hsl(0, 0%, 25%) 1px solid;
+  border: hsl(0, 0%, 22%) 1px solid;
   border-radius: 3px;
-  background-color: hsl(0, 0%, 20%);
+  background-color: hsl(0, 0%, 18%);
   font-size: 14px;
   font-family: IBMPlexSans, Arial, sans-serif;
   outline: none;
@@ -147,24 +159,27 @@ button:hover {
   background-color: hsl(0, 0%, 40%);
 }
 
-.post-btn {
+.submit {
   width: fit-content;
   border-radius: 50px;
   padding: .5em 2em;
-  margin-left: auto;
   border: none;
-  color: hsl(0, 0%, 60%);
   background-color: hsl(0, 0%, 90%);
+}
+
+.submit:hover {
+  background-color: hsl(0, 0%, 80%);
+}
+
+.post-btn {
+  margin-left: auto;
+  color: hsl(0, 0%, 60%);
   cursor: not-allowed;
 }
 
 .post-btn.enabled {
   color: hsl(0, 0%, 30%);
   cursor: pointer;
-}
-
-.post-btn:hover {
-  background-color: hsl(0, 0%, 80%);
 }
 
 .newThread {
@@ -194,22 +209,31 @@ button:hover {
   margin: 1em 0 0 auto;
 }
 
-.del.form-cont {
+.del.form-cont, .background {
   display: none;
-  position: absolute;
-  top: 0;
+  position: fixed;
 }
 
-.del.form-cont.show {
+.del.form-cont {
+  top: calc(50% - 54px);
+  left: calc(50% - 196px / 2);
+  z-index: 2;
+}
+
+.background {
+  background-color: hsl(0, 0%, 10%, 70%);
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+}
+
+.del.form-cont.show, .background.show {
   display: inline-block;
 }
 
-.submit-password {
-  width: fit-content;
-  border-radius: 50px;
-  padding: .5em 2em;
-  border: none;
-  background-color: hsl(0, 0%, 90%);
+.del-pword-btn {
   color: hsl(0, 0%, 30%);
   margin-inline: auto;
 }

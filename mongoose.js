@@ -59,10 +59,10 @@ const createReply = (text, password, thread_id, done) => {
   });
 };
 
-const findRecentThreads = done => {
+const findRecentThreads = (limit, done) => {
   Threads
     .find()
-    .limit(10)
+    .limit(limit)
     .sort("-created_on")
     .exec((err, arr) => {
       if (err) return console.error(err);

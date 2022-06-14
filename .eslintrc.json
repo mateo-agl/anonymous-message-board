@@ -30,11 +30,11 @@
         }],
         "react/jsx-closing-bracket-location": ["error", "tag-aligned"],
         "react/jsx-closing-tag-location": ["error", 1],
-        "react/jsx-sort-props": ["error", {
+        "react/jsx-sort-props": ["warn", {
             "callbacksLast": true
         }],
-        "indent": ["error", "tab"],
-        "react/jsx-indent": ["error", "tab"],
+        "indent": ["warn", "tab"],
+        "react/jsx-indent": ["warn", "tab"],
         "multiline-ternary": ["error", "always-multiline"],
         "semi": ["warn", "always"]
     }

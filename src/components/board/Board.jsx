@@ -1,71 +1,51 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Thread } from "./thread/Thread.jsx";
+import { CreateForm, DeleteForm } from "../shared";
 
-export const Board = ({
-	CreateForm,
-	DeleteForm,
-	ReportBtn,
-	fetchData
-}) => {
-	const [data, setData] = useState("");
+export const Board = ({fetchData}) => {
 	const devHostName = "http://localhost:8080";
 	const currentBoard = window.location.pathname.slice(3);
 	const url = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads/${currentBoard}`;
 	const title = `Welcome to ${currentBoard}`;
-	const resetData = () => setData({...data});
 
-	useEffect(() => fetchData(url, data => {
-		setData({
-			threads: data,
-			newThread: {
-				board: currentBoard,
-				delete_password: "",
-				text: ""
-			}
-		});
-	}), [setData, currentBoard]);
+	const [data, setData] = useState({
+		formClass: "",
+		reqBody: "",
+		threads: []
+	});
 
-	const handleNewThreadData = e => {
-		setData({
-			...data,
-			newThread: {
-				...data.newThread,
-				[e.target.name]: e.target.value
-			}
-		});
-	};
-
-	const createAction = newData => {
-		setData({
-			threads: [newData, ...data.threads],
-			newThread: {
-				...data.newThread,
-				delete_password: "",
-				text: ""
-			}
-		});
-	};
-
-	const delFromState = index => {
-		const newThreads = data.threads.slice();
-		newThreads.splice(index, 1);
-		setData({
-			...data,
-			threads: newThreads
-		});
-	};
+	const getThreads = () => fetchData(
+		url, threads => setData({ 
+			formClass: "",
+			reqBody: "",
+			threads: threads 
+		})
+	);
 	
-	if(!data) return "";
+	useEffect(() => getThreads(), [currentBoard]);
+
+	const reset = () => setData({...data});
+
+	const createAction = newData => newData ? (getThreads(), true) : alert("Oops, an error has ocurred");
+
+	const delAction = data => data ? (getThreads(), true) : alert("Incorrect password");
+
+	const handleForm = reqBody => setData({ 
+		...data, 
+		formClass: !data.formClass ? "show" : "",
+		reqBody: reqBody 
+	});
+	
 	return (
 		<div className="container">
 			<div className="board-cont">
-				<Link className="board-link" to="/">Home</Link>
-				<Link className="board-link" to="/b/games" onClick={resetData}>Games</Link>
-				<Link className="board-link" to="/b/technology" onClick={resetData}>Technology</Link>
-				<Link className="board-link" to="/b/politics" onClick={resetData}>Politics</Link>
-				<Link className="board-link" to="/b/animation" onClick={resetData}>Animation</Link>
-				<Link className="board-link" to="/b/food" onClick={resetData}>Food</Link>
+				<Link className="board-link" to="/" onClick={reset}>Home</Link>
+				<Link className="board-link" to="/b/games" onClick={reset}>Games</Link>
+				<Link className="board-link" to="/b/technology" onClick={reset}>Technology</Link>
+				<Link className="board-link" to="/b/politics" onClick={reset}>Politics</Link>
+				<Link className="board-link" to="/b/animation" onClick={reset}>Animation</Link>
+				<Link className="board-link" to="/b/food" onClick={reset}>Food</Link>
 			</div>
 			<header>
 				<h1>{title}</h1>
@@ -75,11 +55,8 @@ export const Board = ({
 				<div className="form-cont">
 					<CreateForm
 						action={createAction}
-						deletePassword={data.newThread.delete_password}
-						handleData={handleNewThreadData}
+						board={currentBoard}
 						placeholder={"Quick Thread"}
-						reqBody={data.newThread}
-						text={data.newThread.text}
 						url={url}
 					/>
 				</div>
@@ -89,11 +66,7 @@ export const Board = ({
 				data.threads.map(
 					(ele, i) => (
 						<Thread 
-							CreateForm={CreateForm}
-							DeleteForm={DeleteForm}
-							ReportBtn={ReportBtn}
-							delFromState={delFromState}
-							index={i}
+							handleForm={handleForm}
 							key={i}
 							thread={ele}
 							url={url}
@@ -101,6 +74,13 @@ export const Board = ({
 					)
 				)
 			}
+			<DeleteForm 
+				action={delAction}
+				formClass={data.formClass}
+				handleForm={handleForm}
+				reqBody={data.reqBody}
+				url={url}
+			/>
 		</div>
 	);
 };

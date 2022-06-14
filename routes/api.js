@@ -13,7 +13,7 @@ const {
 const apiRoutes = app => {
   app
     .route("/api/threads/")
-    .get((req, res) => findRecentThreads(arr => res.send(arr)));
+    .get((req, res) => findRecentThreads(req.query.limit, arr => res.send(arr)));
 
   app
     .route("/api/threads/:board")
@@ -39,9 +39,9 @@ const apiRoutes = app => {
     .route("/api/replies/:board")
     .post((req, res) => {
       const b = req.body;
-      createReply(b.text, b.delete_password, b.thread_id, (rep) => {
+      createReply(b.text, b.delete_password, req.query.thread_id, (rep) => {
         if (b.quick_reply) return res.json(rep);
-        res.redirect(`/b/${req.params.board}/${b.thread_id}`);
+        res.redirect(`/b/${req.params.board}/${req.query.thread_id}`);
       });
     })
     .get((req, res) => findReplies(req.query.thread_id, (doc) => res.json(doc)))

@@ -1,38 +1,16 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Reply } from "./Reply";
+import { DeleteBtn, ReportBtn } from "../../shared";
 
-export const Thread = ({
-	DeleteForm,
-	ReportBtn,
-	thread,
-	index,
-	url,
-	delFromState,
-}) => {
-	const [threadPword, setThreadPword] = useState("");
+export const Thread = ({ thread, url, handleForm }) => {
 	const replies = thread.replies.slice(0, 3);
 	const hiddenCount = thread.replies.length > 3 ? thread.replies.length - 3 : 0;
 	const threadDate = new Date(thread.created_on).toLocaleString().slice(0,-3);
-	
-	const handlePassword = e => setThreadPword(e.target.value);
-
-	const delAction = data => {
-		if(data) {
-			delFromState(index);
-			setThreadPword("");
-			return;
-		};
-		alert("Incorrect password");
-	};
 	
 	return (
 		<>
 			<div className="thread-cont">
 				<div className="thread">
-					<label className="id">
-						{`id: ${thread._id} (${threadDate})`}
-					</label>
+					<label className="id">{`id: ${thread._id} (${threadDate})`}</label>
 					<p>{thread.text}</p>
 				</div>
 				<h5 className="thread-link">
@@ -44,19 +22,18 @@ export const Thread = ({
 						reqBody={{ thread_id: thread._id }}
 						url={url}
 					/>
-					<DeleteForm
-						action={delAction}
-						deletePassword={threadPword}
-						handlePassword={handlePassword}
-						reqBody={{
-							thread_id: thread._id,
-							delete_password: threadPword
-						}}
-						url={url}
+					<DeleteBtn 
+						handleForm={handleForm}
+						reqBody={{ thread_id: thread._id }} 
 					/>
 				</div>
 				{
-					replies.map((rep, i) => <Reply key={i} rep={rep} />)
+					replies.map((rep, i) => (
+						<div className="reply" key={i}>
+							<label className="id">{`id: ${rep._id} (${new Date(rep.created_on).toLocaleString().slice(0,-3)})`}</label>
+							<p>{rep.text}</p>
+						</div>
+					))
 				}
 			</div>
 			<hr/>
