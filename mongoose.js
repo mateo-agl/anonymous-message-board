@@ -14,32 +14,57 @@ const threadsSchema = mongoose.Schema({
   bumped_on: Date,
   reported: Boolean,
   delete_password: String,
-  replies: [repliesSchema],
-  board: String,
+  replies: [repliesSchema]
 });
 
-const Threads = mongoose.model("Threads", threadsSchema);
+const boardSchema = mongoose.Schema({
+  name: String,
+  threads: [threadsSchema]
+});
+
+const Boards = mongoose.model("Boards", boardSchema);
+
+const filter = "-threads.reported -threads.delete_password -threads.replies.reported -threads.replies.delete_password";
 
 const createThread = (board, text, password, done) => {
   const date = new Date();
-  const newThread = new Threads({
+
+  const newThread = {
     text: text,
     created_on: date,
     bumped_on: date,
     reported: false,
     delete_password: password,
-    replies: [],
-    board: board,
+    replies: []
+  };
+
+  const newBoard = new Boards({
+    name: board,
+    threads: [newThread]
   });
-  newThread.save((err, doc) => {
-    if (err) return console.error(err);
-    done(doc);
+
+  Boards.findOne({ name: board }, (err, doc) => {
+    if(err) return console.error(err);
+    if(doc) {
+      doc.threads.unshift(newThread);
+      doc.save((err, doc) => {
+        if(err) return console.error(err);
+        return done(doc.threads[0]);
+      });
+      return;
+    };
+
+    newBoard.save((err, doc) => {
+      if (err) return console.error(err);
+      done(doc.threads[0]);
+    });
   });
 };
 
-const createReply = (text, password, thread_id, done) => {
+const createReply = (board, text, password, thread_id, done) => {
   const date = new Date();
   const id = mongoose.Types.ObjectId(thread_id);
+
   const newReply = {
     _id: new mongoose.Types.ObjectId(),
     text: text,
@@ -47,12 +72,15 @@ const createReply = (text, password, thread_id, done) => {
     delete_password: password,
     reported: false,
   };
-  Threads.findById(id, (err, doc) => {
+
+  Boards.findOne({ name: board }, (err, doc) => {
     if (err) return console.error(err);
-    if (doc === null) return done(null);
-    doc.replies.unshift(newReply);
-    doc.bumped_on = date;
-    doc.save((err) => {
+    const thread = doc.threads.id(id);
+    if (!thread) return done(null);
+    thread.replies.unshift(newReply);
+    thread.bumped_on = date;
+
+    doc.save(err => {
       if (err) return console.error(err);
       done(newReply);
     });
@@ -60,92 +88,93 @@ const createReply = (text, password, thread_id, done) => {
 };
 
 const findRecentThreads = (limit, done) => {
-  Threads
-    .find()
-    .limit(limit)
-    .sort("-created_on")
+  Boards.find()
+    .select(filter)
     .exec((err, arr) => {
-      if (err) return console.error(err);
-      done(arr);
+      if(err) return console.error(err);
+      let threads = [];
+      arr.map(b => threads = [...threads, ...b.threads]);
+      threads.sort((a, b) => b.created_on - a.created_on);
+      done(threads.slice(0, limit));
     });
 };
 
 const findThreadsByBoard = (board, done) => {
-  Threads.find({ board: board })
-    .select(
-      "-reported -delete_password -replies.reported -replies.delete_password"
-    )
-    .sort("-bumped_on")
-    .exec((err, arr) => {
-      if (err) return console.error(err);
-      done(arr);
-    });
-};
-
-const findReplies = (thread_id, done) => {
-  const id = mongoose.Types.ObjectId(thread_id);
-  Threads.findById(id)
-    .select(
-      "-reported -delete_password -replies.reported -replies.delete_password"
-    )
+  Boards.findOne({ name: board })
+    .select(filter)
     .exec((err, doc) => {
       if (err) return console.error(err);
-      done(doc);
+      done(doc.threads);
     });
 };
 
-const deleteThread = (thread_id, password, done) => {
+const findReplies = (board, thread_id, done) => {
   const id = mongoose.Types.ObjectId(thread_id);
-  Threads.findOneAndDelete(
-    {
-      _id: id,
-      delete_password: password,
-    },
-    (err, doc) => {
+
+  Boards.findOne({ name: board })
+    .select(filter)
+    .exec((err, doc) => {
       if (err) return console.error(err);
-      done(doc);
-    }
-  );
+      done(doc.threads.id(id));
+    });
 };
 
-const deleteReply = (thread_id, reply_id, password, done) => {
+const deleteThread = (board, thread_id, password, done) => {
+  const id = mongoose.Types.ObjectId(thread_id);
+  Boards.findOne({ name: board }, (err, doc) => {
+    if (err) return console.error(err);
+    const thread = doc.threads.id(id);
+    if(!thread || thread.delete_password !== password) return done(null);
+    thread.remove();
+    doc.save(err => {
+      if (err) return console.error(err);
+      done(true);
+    });
+  });
+};
+
+const deleteReply = (board, thread_id, reply_id, password, done) => {
   const t_id = mongoose.Types.ObjectId(thread_id);
   const r_id = mongoose.Types.ObjectId(reply_id);
-  Threads.findById(t_id, (err, doc) => {
+  Boards.findOne({ name: board }, (err, doc) => {
     if (err) return console.error(err);
-    const reply = doc.replies.id(r_id);
-    if (reply.delete_password != password) return done(null);
+    const thread = doc.threads.id(t_id);
+    const reply = thread.replies.id(r_id);
+    if (!reply || reply.delete_password !== password) return done(null);
     reply.remove();
-    doc.save((err, doc) => {
+    doc.save(err => {
       if (err) return console.error(err);
-      done(doc);
+      done(true);
     });
   });
 };
 
-const reportThread = (thread_id, done) => {
+const reportThread = (board, thread_id, done) => {
   const id = mongoose.Types.ObjectId(thread_id);
-  Threads.findById(id, (err, doc) => {
+  Boards.findOne({ name: board }, (err, doc) => {
     if (err) return console.error(err);
-    if (doc.reported) return done();
-    doc.reported = true;
+    const thread = doc.threads.id(id);
+    if (thread.reported) return done(false);
+    thread.reported = true;
     doc.save((err) => {
       if (err) return console.error(err);
-      done();
+      done(true);
     });
   });
 };
 
-const reportReply = (thread_id, reply_id, done) => {
+const reportReply = (board, thread_id, reply_id, done) => {
   const t_id = mongoose.Types.ObjectId(thread_id);
   const r_id = mongoose.Types.ObjectId(reply_id);
-  Threads.findById(t_id, (err, doc) => {
+  Boards.findOne({ name: board }, (err, doc) => {
     if (err) return console.error(err);
-    if (doc.replies.id(r_id).reported === true) return done();
-    doc.replies.id(r_id).reported = true;
+    const thread = doc.threads.id(t_id);
+    const reply = thread.replies.id(r_id);
+    if (reply.reported) return done(false);
+    reply.reported = true;
     doc.save((err) => {
       if (err) return console.error(err);
-      done();
+      done(true);
     });
   });
 };
