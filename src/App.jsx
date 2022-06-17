@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Routes } from "react-router-dom";
 import { Main, Board, Thread } from "./components";
 import axios from 'axios';
-import "./app.css";
+import "./app.styles.css";
 
-const Error = () => <h1>{"This page doesn't exist"}</h1>;
+const Error = () => <h1>{"This board doesn't exist"}</h1>;
 
 const App = () => {
 	const fetchData = (url, action) => {
