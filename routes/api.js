@@ -19,18 +19,16 @@ const apiRoutes = app => {
     .route("/api/threads/:board")
     .post((req, res) => {
       const b = req.body;
-      createThread(b.board, b.text, b.delete_password, doc => {
-        res.json(doc);
-      });
+      createThread(b.board, b.text, b.delete_password, doc => res.json(doc));
     })
     .get((req, res) => findThreadsByBoard(req.params.board, arr => res.send(arr)))
     .put((req, res) => {
       const b = req.body;
-      reportThread(b.thread_id, () => res.send(b.thread_id));
+      reportThread(req.params.board, b.thread_id, () => res.send(b.thread_id));
     })
     .delete((req, res) => {
       const b = req.body;
-      deleteThread(b.thread_id, b.delete_password, doc => {
+      deleteThread(req.params.board, b.thread_id, b.delete_password, doc => {
         res.json(doc);
       });
     });
@@ -39,19 +37,19 @@ const apiRoutes = app => {
     .route("/api/replies/:board")
     .post((req, res) => {
       const b = req.body;
-      createReply(b.text, b.delete_password, req.query.thread_id, (rep) => {
+      createReply(req.params.board, b.text, b.delete_password, req.query.thread_id, (rep) => {
         if (b.quick_reply) return res.json(rep);
         res.redirect(`/b/${req.params.board}/${req.query.thread_id}`);
       });
     })
-    .get((req, res) => findReplies(req.query.thread_id, (doc) => res.json(doc)))
+    .get((req, res) => findReplies(req.params.board, req.query.thread_id, (doc) => res.json(doc)))
     .put((req, res) => {
       const b = req.body;
-      reportReply(b.thread_id, b.reply_id, () => res.send(b.reply_id));
+      reportReply(req.params.board, b.thread_id, b.reply_id, () => res.send(b.reply_id));
     })
     .delete((req, res) => {
       const b = req.body;
-      deleteReply(b.thread_id, b.reply_id, b.delete_password, (doc) => {
+      deleteReply(req.params.board, b.thread_id, b.reply_id, b.delete_password, (doc) => {
         res.json(doc);
       });
     });
