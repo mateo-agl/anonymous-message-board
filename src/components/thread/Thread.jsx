@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useHref } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Reply } from "./reply/Reply";
 import { CreateForm, DeleteBtn, DeleteForm, ReportBtn } from "../shared";
 
@@ -38,7 +38,7 @@ export const Thread = ({fetchData}) => {
 	const createAction = newData => newData ? (getThreadData(), true) : alert("Oops, an error has ocurred");
 	
 	return (
-		<div className="container">
+		<div className="container thread-route">
 			<div className="board-cont">
 				<Link className="board-link" to="/">Home</Link>
 				<Link className="board-link" to="/b/games">Games</Link>
@@ -68,8 +68,8 @@ export const Thread = ({fetchData}) => {
 					<CreateForm
 						action={createAction}
 						placeholder={"Quick Reply"}
-						url={repliesUrl}
 						quick_reply={true}
+						url={repliesUrl}
 					/>
 				</div>
 				<div className="replies">

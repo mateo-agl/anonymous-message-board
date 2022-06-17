@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export const CreateForm = ({ boardInput, board, placeholder, url, action, quick_reply }) => {
 	const [newThread, setNewThread] = useState({
@@ -18,10 +18,15 @@ export const CreateForm = ({ boardInput, board, placeholder, url, action, quick_
 			: quick_reply 
 				? { ...newThread, quick_reply: true }
 				: newThread;
-		
+
+		const newUrl = url + newThread.board;
+
 		enableBtn && (
-			axios.post(url, newObj)
-				.then(res => action(res.data))
+			axios.post(newUrl, newObj)
+				.then(res => action({
+					...res.data,
+					board: board ? board : newThread.board
+				}))
 				.then(res => res && setNewThread({
 					board: "",
 					delete_password: "",

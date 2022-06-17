@@ -10,7 +10,9 @@ export const Thread = ({ thread, url, handleForm }) => {
 		<>
 			<div className="thread-cont">
 				<div className="thread">
-					<label className="id">{`id: ${thread._id} (${threadDate})`}</label>
+					<div className="thread-data">
+						<label className="id">{`id: ${thread._id} (${threadDate})`}</label>
+					</div>
 					<p>{thread.text}</p>
 				</div>
 				<h5 className="thread-link">
@@ -30,7 +32,9 @@ export const Thread = ({ thread, url, handleForm }) => {
 				{
 					replies.map((rep, i) => (
 						<div className="reply" key={i}>
-							<label className="id">{`id: ${rep._id} (${new Date(rep.created_on).toLocaleString().slice(0,-3)})`}</label>
+							<div className="thread-data">
+								<label className="id">{`id: ${rep._id} (${new Date(rep.created_on).toLocaleString().slice(0,-3)})`}</label>
+							</div>
 							<p>{rep.text}</p>
 						</div>
 					))

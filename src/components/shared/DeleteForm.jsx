@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export const DeleteForm = ({ url, reqBody, action, formClass, handleForm }) => {
 	const [password, setPassword] = useState("");
@@ -10,7 +10,7 @@ export const DeleteForm = ({ url, reqBody, action, formClass, handleForm }) => {
 		? alert("The password input is empty.")
 		: axios.delete(url, { data: { ...reqBody, delete_password: password } })
 			.then(res => action(res.data))
-            .then(res => res && setPassword(""))
+			.then(res => res && setPassword(""))
 			.catch(err => console.error(err));
 
 	return (

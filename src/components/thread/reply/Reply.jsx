@@ -4,9 +4,11 @@ export const Reply = ({ handleForm, url, thread, rep }) => {
 	return (
 		<>
 			<div className="reply">
-				<label className="id">
-					{`id: ${rep._id} (${new Date(rep.created_on).toLocaleString().slice(0,-3)})`}
-				</label>
+				<div className="rep-data">
+					<label className="id">
+						{`id: ${rep._id} (${new Date(rep.created_on).toLocaleString().slice(0,-3)})`}
+					</label>
+				</div>
 				<p>{rep.text}</p>
 				<div className="actions-cont">
 					<ReportBtn 

@@ -3,20 +3,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { CreateForm } from "../shared";
 
 export const Main = ({fetchData}) => {
-	const [newThread, setNewThread] = useState({ threads: [] });
+	const [threadList, setThreadList] = useState({ threads: [] });
 	
 	const devHostName = "http://localhost:8080";
 	const threadsUrl = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads?limit=10`;
 
 	const navigate = useNavigate();
 
-	const getRecentThreads = data => setNewThread({ ...newThread, threads: data });
+	const getRecentThreads = data => setThreadList({ ...threadList, threads: data });
 
 	useEffect(() => fetchData(threadsUrl, getRecentThreads), []);
 
 	const createAction = data => data && navigate(`b/${data.board}/${data._id}`);
 
-	const newThreadUrl = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads/${newThread.board}`;
+	const newThreadUrl = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads/`;
 	
 	return (
 		<div className="container">
@@ -25,11 +25,13 @@ export const Main = ({fetchData}) => {
 			</header>
 			<div className="board-cont">
 				<h2>Boards</h2>
-				<Link className="board-link" to="/b/games">Games</Link>
-				<Link className="board-link" to="/b/technology">Technology</Link>
-				<Link className="board-link" to="/b/politics">Politics</Link>
-				<Link className="board-link" to="/b/animation">Animation</Link>
-				<Link className="board-link" to="/b/food">Food</Link>
+				<div>
+					<Link className="board-link" to="/b/games">Games</Link>
+					<Link className="board-link" to="/b/technology">Technology</Link>
+					<Link className="board-link" to="/b/politics">Politics</Link>
+					<Link className="board-link" to="/b/animation">Animation</Link>
+					<Link className="board-link" to="/b/food">Food</Link>
+				</div>
 			</div>
 			<div className="form-cont">
 				<CreateForm
@@ -42,7 +44,7 @@ export const Main = ({fetchData}) => {
 			<div id="recent-threads">
 				<h2>Threads sorted by most recent</h2>
 				{
-					newThread.threads.map((t, i) => 
+					threadList.threads.map((t, i) => 
 						<div className="thread-cont main-thread" key={i}>
 							<div className="thread">
 								<div className="thread-data">
@@ -53,7 +55,7 @@ export const Main = ({fetchData}) => {
 								</div>
 								<p className="thread-text">{t.text}</p>
 							</div>
-							<p className="main-replies">{`${t.replies.length} replies`}</p>
+							<label className="main-replies">{`${t.replies.length} replies`}</label>
 							<Link className="thread-link" to={`b/${t.board}/${t._id}`}/>
 						</div>
 					)

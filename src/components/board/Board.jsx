@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Thread } from "./thread/Thread.jsx";
 import { CreateForm, DeleteForm } from "../shared";
 
 export const Board = ({fetchData}) => {
 	const devHostName = "http://localhost:8080";
-	const currentBoard = window.location.pathname.slice(3);
+	const currentBoard = window.location.pathname.split("/")[2];
 	const url = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads/${currentBoard}`;
 	const title = `Welcome to ${currentBoard}`;
 
@@ -38,7 +38,7 @@ export const Board = ({fetchData}) => {
 	});
 	
 	return (
-		<div className="container">
+		<div className="container board-route">
 			<div className="board-cont">
 				<Link className="board-link" to="/" onClick={reset}>Home</Link>
 				<Link className="board-link" to="/b/games" onClick={reset}>Games</Link>
@@ -50,16 +50,14 @@ export const Board = ({fetchData}) => {
 			<header>
 				<h1>{title}</h1>
 			</header>
-			<div id="submitNewThread">
-				<h3>Submit a new thread:</h3>
-				<div className="form-cont">
-					<CreateForm
-						action={createAction}
-						board={currentBoard}
-						placeholder={"Quick Thread"}
-						url={url}
-					/>
-				</div>
+			<h3>Submit a new thread:</h3>
+			<div className="form-cont">
+				<CreateForm
+					action={createAction}
+					board={currentBoard}
+					placeholder={"Quick Thread"}
+					url={url}
+				/>
 			</div>
 			<hr />
 			{

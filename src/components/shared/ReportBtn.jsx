@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export const ReportBtn = ({url, reqBody}) => {
 	const [btn, setBtn] = useState({text: "Report", class: ""});
@@ -7,13 +7,14 @@ export const ReportBtn = ({url, reqBody}) => {
 
 	useEffect(() => {
 		const reportedList = localStorage.getItem("reported");
+		
 		if(reportedList) {
 			const state = JSON.parse(reportedList).includes(id)
 				? {text: "Reported", class: "reported"}
 				: {text: "Report", class: ""};
 			setBtn(state);
 		};
-	}, []);
+	}, [reqBody]);
 
 	const sendReportReq = () => axios.put(url, reqBody)
 		.then(() => {
