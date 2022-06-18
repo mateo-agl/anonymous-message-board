@@ -5,7 +5,7 @@ import { Search } from './Search';
 import axios from 'axios';
 import "./app.styles.css";
 
-const Error = () => <h1>{"This board doesn't exist"}</h1>;
+const Error = () => <h1>{"This route doesn't exist"}</h1>;
 
 const App = () => {
 	const [boards, setBoards] = useState([]);

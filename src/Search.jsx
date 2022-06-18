@@ -1,21 +1,31 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { ReactComponent as Arrow } from "./assests/arrow-left-short.svg";
 
 export const Search = ({boards}) => {
 	const [board, setBoard] = useState({name: "", matches: []});
 
 	const navigate = useNavigate();
 
-	const handleBoardName = e => setBoard({name: e.target.value, matches: findMatch(e.target.value)});
+	const handleBoardName = e => setBoard({
+		name: e.target.value,
+		matches: findMatch(e.target.value.toLowerCase())
+	});
 
 	const handleEnter = e => e.key === "Enter" && board.name && navigate(`b/${board.name}`);
 
-	const findMatch = input => boards.filter(({name}) => !input ? false : name.startsWith(input));
+	const findMatch = input => boards.filter(
+		({name}) => !input ? false : name.startsWith(input)
+	);
 
-	const reset = () => setBoard({name: "", matches: []});
-	
+	window.onclick = e => e.target.id !== "search" && setBoard({name: "", matches: []});
+
 	return (
 		<div className="search form-cont">
+			{
+				window.location.pathname !== "/" && 
+				<Link to="/"><Arrow className="home"/></Link>
+			}
 			<div id="search-cont">
 				<input
 					autoComplete="off"
@@ -29,7 +39,7 @@ export const Search = ({boards}) => {
 				<div id="matches">
 					{
 						board.matches.map(({name}, i) => (
-							<Link className="match" key={i} to={`b/${name}`} onClick={reset}>{name}</Link>
+							<Link className="match" key={i} to={`b/${name}`}>{name}</Link>
 						))
 					}
 				</div>

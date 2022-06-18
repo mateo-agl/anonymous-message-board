@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Thread } from "./thread/Thread.jsx";
 import { CreateForm, DeleteForm } from "../shared";
 import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
 
 export const Board = ({ host, fetchData }) => {
 	const currentBoard = window.location.pathname.split("/")[2];
@@ -15,7 +14,7 @@ export const Board = ({ host, fetchData }) => {
 		reqBody: "",
 		threads: []
 	});
-
+	
 	const getThreads = () => fetchData(
 		url, threads => setData({ 
 			formClass: "",
@@ -36,41 +35,42 @@ export const Board = ({ host, fetchData }) => {
 		reqBody: reqBody 
 	});
 	
-	return (
-		<div className="container board-route">
-			<Link className="home" to="/">Home</Link>
-			<header>
-				<h1>{currentBoard}</h1>
-			</header>
-			<h3>Submit a new thread:</h3>
-			<div className="form-cont">
-				<CreateForm
-					action={createAction}
-					board={currentBoard}
-					placeholder={"Quick Thread"}
+	return !data.threads
+		? <h1>{"This board doesn't exist"}</h1>
+		: (
+			<div className="container board-route">
+				<header>
+					<h1>{currentBoard}</h1>
+				</header>
+				<h3>Submit a new thread:</h3>
+				<div className="form-cont">
+					<CreateForm
+						action={createAction}
+						board={currentBoard}
+						placeholder={"Quick Thread"}
+						url={url}
+					/>
+				</div>
+				<hr />
+				{
+					data.threads.map(
+						(ele, i) => (
+							<Thread 
+								handleForm={handleForm}
+								key={i}
+								thread={ele}
+								url={url}
+							/>
+						)
+					)
+				}
+				<DeleteForm 
+					action={delAction}
+					formClass={data.formClass}
+					handleForm={handleForm}
+					reqBody={data.reqBody}
 					url={url}
 				/>
 			</div>
-			<hr />
-			{
-				data.threads.map(
-					(ele, i) => (
-						<Thread 
-							handleForm={handleForm}
-							key={i}
-							thread={ele}
-							url={url}
-						/>
-					)
-				)
-			}
-			<DeleteForm 
-				action={delAction}
-				formClass={data.formClass}
-				handleForm={handleForm}
-				reqBody={data.reqBody}
-				url={url}
-			/>
-		</div>
-	);
+		);
 };

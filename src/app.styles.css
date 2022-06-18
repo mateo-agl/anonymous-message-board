@@ -16,7 +16,6 @@
   color: var(--primary-text-color);
   font-family: var(--primary-font);
   border-radius: 4px;
-  line-break: anywhere;
 }
 
 body {
@@ -25,6 +24,7 @@ body {
 
 h1 {
   font-size: clamp(1.25em, 5vw, 2em);
+  text-align: center;
 }
 
 h2 {
@@ -55,11 +55,6 @@ input:focus, textarea:focus, .main-thread:hover {
   border: var(--focus-border);
 }
 
-input:-webkit-autofill,
-input:-webkit-autofill:focus {
-    transition: background-color 600000s 0s, color 600000s 0s, font-size 600000s 0s !important;
-}
-
 button {
   font-weight: 600;
   font-size: 12px;
@@ -73,13 +68,17 @@ label {
   font-family: var(--secondary-font);
 }
 
+p {
+  display: block;
+  font-size: 14px;
+  line-break: anywhere;
+}
+
 hr {
   border: var(--border);
 }
 
-nav {
-  margin-top: 3em;
-}
+/* Containers */
 
 .container {
   position: relative;
@@ -89,27 +88,23 @@ nav {
   margin: auto;
 }
 
-.home {
-  position: absolute;
-  top: -48px;
-  left: 0;
-  font-family: var(--secondary-font);
-  font-size: 12px;
-  font-weight: 600;
-  background-color: var(--highlight-bg-color);
-  padding: 10px;
-  border-radius: 50px;
-  width: fit-content;
-}
-
 .board-route, .thread-route {
   padding: 1em 2rem;
   background-color: var(--primary-bg-color);
 }
 
+@media (max-width: 600px) {
+  .board-route, .thread-route {
+    padding: 1em 0;
+  }
+}
+
+/* Containers */
+
+/* Search */
+
 .search.form-cont {
   display: flex;
-  justify-content: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -119,13 +114,19 @@ nav {
   z-index: 3;
 }
 
+.home {
+  width: 2em;
+  height: 100%;
+}
+
 #search-cont {
   display: flex;
-  flex-direction: column;
   position: relative;
+  flex-direction: column;
   padding-block: 4px;
   max-width: 340px;
   width: 100%;
+  margin: 0 auto;
 }
 
 #search {
@@ -155,15 +156,24 @@ nav {
   background-color: var(--highlight-bg-color);
 }
 
-header {
-  text-align: center;
-  margin: 1em 0;
+/* Search */
+
+/* Board Links */
+
+nav {
+  margin-top: 3em;
 }
 
 .board-cont {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
+}
+
+@media(max-width: 384px) {
+  .board-cont {
+    justify-content: flex-start;
+    overflow: scroll;
+  }
 }
 
 .board-cont .board-link, #matches .board-link {
@@ -179,6 +189,10 @@ header {
   font-family: var(--secondary-font);
   z-index: 1;
 }
+
+/* Board Links */
+
+/* Threads */
 
 #recent-threads {
   width: 100%;
@@ -205,11 +219,7 @@ header {
 .thread-data {
   display: flex;
   justify-content: space-between;
-}
-
-.thread-text {
-  display: block;
-  font-size: 14px;
+  flex-wrap: wrap;
 }
 
 .main-thread {
@@ -220,7 +230,6 @@ header {
 
 .main-thread .id {
   cursor: pointer;
-  text-align: end;
 }
 
 .main-thread .thread-link {
@@ -231,10 +240,9 @@ header {
   left: 0;
 }
 
-.main-title {
-  text-align: center;
-  margin-bottom: 1em;
-}
+/* Threads */
+
+/* Forms */
 
 .form {
   display: flex;
@@ -334,6 +342,8 @@ header {
 .del-btn:hover, .rep-btn:hover {
   background-color: var(--highlight-bg-color);
 }
+
+/* Forms */
 
 .reportThread {
   margin-right: 1em;
