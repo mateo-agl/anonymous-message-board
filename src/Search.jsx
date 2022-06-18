@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as Arrow } from "./assests/arrow-left-short.svg";
 
 export const Search = ({boards}) => {
 	const [board, setBoard] = useState({name: "", matches: []});
 
-	useEffect(() => (
-		window.onclick = e => e.target.id !== "search" && setBoard({name: "", matches: []})
-	), []);
-
 	const navigate = useNavigate();
+
+	const reset = () => setBoard({name: "", matches: []});
 
 	const handleBoardName = e => setBoard({
 		name: e.target.value,
@@ -35,6 +33,7 @@ export const Search = ({boards}) => {
 					name="search"
 					placeholder="Search a board"
 					value={board.name}
+					onBlur={reset}
 					onChange={handleBoardName}
 					onKeyDown={handleEnter}
 				/>
