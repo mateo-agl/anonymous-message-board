@@ -1,6 +1,7 @@
 const {
   createThread,
   createReply,
+  findBoards,
   findRecentThreads,
   findThreadsByBoard,
   findReplies,
@@ -11,6 +12,10 @@ const {
 } = require("../mongoose.js");
 
 const apiRoutes = app => {
+  app
+    .route("/api/boards")
+    .get((req, res) => findBoards(arr => res.send(arr)));
+
   app
     .route("/api/threads/")
     .get((req, res) => findRecentThreads(req.query.limit, arr => res.send(arr)));
