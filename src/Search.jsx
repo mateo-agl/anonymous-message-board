@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as Arrow } from "./assests/arrow-left-short.svg";
 
 export const Search = ({boards}) => {
 	const [board, setBoard] = useState({name: "", matches: []});
+
+	useEffect(() => (
+		window.onclick = e => e.target.id !== "search" && setBoard({name: "", matches: []})
+	), []);
 
 	const navigate = useNavigate();
 
@@ -17,8 +21,6 @@ export const Search = ({boards}) => {
 	const findMatch = input => boards.filter(
 		({name}) => !input ? false : name.startsWith(input)
 	);
-
-	window.onclick = e => e.target.id !== "search" && setBoard({name: "", matches: []});
 
 	return (
 		<div className="search form-cont">
