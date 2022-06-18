@@ -115,7 +115,15 @@ const findThreadsByBoard = (board, done) => {
 };
 
 const findReplies = (board, thread_id, done) => {
-  const id = mongoose.Types.ObjectId(thread_id);
+  const ObjectId = mongoose.Types.ObjectId;
+
+  if (ObjectId.isValid(thread_id)) {
+      if (String(new ObjectId(thread_id)) !== thread_id) return done(null);
+  } else {
+    return done(null)
+  };
+  
+  const id = ObjectId(thread_id);
 
   Boards.findOne({ name: board })
     .select(filter)
