@@ -1,13 +1,13 @@
 :root {
   --html-bg-color: hsl(0, 0%, 0%);
   --primary-bg-color: #1A1A1B;
-  --hover-bg-color: #343536;
+  --highlight-bg-color: #343536;
   --border: 1px solid #343536;
   --focus-border: 1px solid #D7DADC;
   --primary-text-color: #D7DADC;
   --secondary-text-color: #818384;
   --primary-font: 'Noto Sans', Arial, sans-serif;
-  --secondary-font: var(--secondary-font);
+  --secondary-font: IBMPlexSans, Arial, sans-serif;
 }
 
 * {
@@ -28,6 +28,7 @@ h1 {
 }
 
 h2 {
+  text-align: center;
   font-size: clamp(1em, 5vw, 1.5em);
 }
 
@@ -39,7 +40,7 @@ a:hover {
   text-decoration: underline;
 }
 
-input, textarea, .main-thread {
+input, textarea, .main-thread, select {
   font-size: 1em;
   padding: .5rem 1rem;
   margin-bottom: .5rem;
@@ -76,45 +77,98 @@ hr {
   border: var(--border);
 }
 
+nav {
+  margin-top: 3em;
+}
+
 .container {
+  position: relative;
   display: flex;
   flex-direction: column;
   max-width: 600px;
   margin: auto;
 }
 
+.home {
+  position: absolute;
+  top: -48px;
+  left: 0;
+  font-family: var(--secondary-font);
+  font-size: 12px;
+  font-weight: 600;
+  background-color: var(--highlight-bg-color);
+  padding: 10px;
+  border-radius: 50px;
+  width: fit-content;
+}
+
 .board-route, .thread-route {
-  padding: 0 2rem;
+  padding: 1em 2rem;
   background-color: var(--primary-bg-color);
-  min-height: 100vh;
+}
+
+.search.form-cont {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  z-index: 3;
 }
 
 #search-cont {
   display: flex;
-  margin: 0;
-  padding: .8em;
-  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  padding-block: 4px;
+  max-width: 340px;
+  width: 100%;
 }
 
 #search {
+  display: flex;
   margin: 0;
-  width: 306px;
 }
 
-.board-cont {
+#matches {
+  width: 100%;
+  background-color: var(--primary-bg-color);
+  position: absolute;
+  top: calc(100% - 4px);
+  left: 0;
+  z-index: 2;
+}
+
+.match {
+  border: var(--border);
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--secondary-font);
+  padding: .5em 1em;
+}
+
+.match:hover {
+  background-color: var(--highlight-bg-color);
+}
+
+header {
   text-align: center;
   margin: 1em 0;
 }
 
-.board-cont div {
+.board-cont {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 
-.board-cont .board-link {
+.board-cont .board-link, #matches .board-link {
   margin: 1em;
-  background-color: hsl(0, 0%, 20%);
+  background-color: var(--highlight-bg-color);
   padding: 10px;
   border-radius: 50px;
 }
@@ -179,6 +233,7 @@ hr {
 
 .main-title {
   text-align: center;
+  margin-bottom: 1em;
 }
 
 .form {
@@ -277,7 +332,7 @@ hr {
 }
 
 .del-btn:hover, .rep-btn:hover {
-  background-color: var(--hover-bg-color);
+  background-color: var(--highlight-bg-color);
 }
 
 .reportThread {
@@ -285,5 +340,5 @@ hr {
 }
 
 .reported {
-  background-color: var(--hover-bg-color);
+  background-color: var(--highlight-bg-color);
 }

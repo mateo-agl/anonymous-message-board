@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Thread } from "./thread/Thread.jsx";
 import { CreateForm, DeleteForm } from "../shared";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
-export const Board = ({fetchData}) => {
-	const devHostName = "http://localhost:8080";
+export const Board = ({ host, fetchData }) => {
 	const currentBoard = window.location.pathname.split("/")[2];
-	const url = `${process.env.NODE_ENV === "development" ? devHostName : ""}/api/threads/${currentBoard}`;
-	const title = `Welcome to ${currentBoard}`;
+	const url = `${host}/api/threads/${currentBoard}`;
 
+	const navigate = useNavigate();
+	
 	const [data, setData] = useState({
 		formClass: "",
 		reqBody: "",
@@ -23,9 +24,7 @@ export const Board = ({fetchData}) => {
 		})
 	);
 	
-	useEffect(() => getThreads(), [currentBoard]);
-
-	const reset = () => setData({...data});
+	useEffect(() => getThreads(), [navigate]);
 
 	const createAction = newData => newData ? (getThreads(), true) : alert("Oops, an error has ocurred");
 
@@ -39,16 +38,9 @@ export const Board = ({fetchData}) => {
 	
 	return (
 		<div className="container board-route">
-			<div className="board-cont">
-				<Link className="board-link" to="/" onClick={reset}>Home</Link>
-				<Link className="board-link" to="/b/games" onClick={reset}>Games</Link>
-				<Link className="board-link" to="/b/technology" onClick={reset}>Technology</Link>
-				<Link className="board-link" to="/b/politics" onClick={reset}>Politics</Link>
-				<Link className="board-link" to="/b/animation" onClick={reset}>Animation</Link>
-				<Link className="board-link" to="/b/food" onClick={reset}>Food</Link>
-			</div>
+			<Link className="home" to="/">Home</Link>
 			<header>
-				<h1>{title}</h1>
+				<h1>{currentBoard}</h1>
 			</header>
 			<h3>Submit a new thread:</h3>
 			<div className="form-cont">

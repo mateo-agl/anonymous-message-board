@@ -1,14 +1,14 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-export const CreateForm = ({ boardInput, board, placeholder, url, action, quick_reply }) => {
+export const CreateForm = ({ boards, board, placeholder, url, action, quick_reply }) => {
 	const [newThread, setNewThread] = useState({
 		board: "",
 		delete_password: "",
 		text: ""
 	});
 	
-	const enableBtn = boardInput
+	const enableBtn = boards
 		? newThread.delete_password && newThread.text && newThread.board ? "enabled" : ""
 		: newThread.delete_password && newThread.text ? "enabled" : "";
 
@@ -20,7 +20,7 @@ export const CreateForm = ({ boardInput, board, placeholder, url, action, quick_
 				: newThread;
 
 		const newUrl = url + newThread.board;
-
+		
 		enableBtn && (
 			axios.post(newUrl, newObj)
 				.then(res => action({
@@ -36,20 +36,25 @@ export const CreateForm = ({ boardInput, board, placeholder, url, action, quick_
 		);
 	};
 
-	const handleData = e => setNewThread({
-		...newThread,
-		[e.target.name]: e.target.value
-	});
-
+	const handleData = e => {
+		setNewThread({
+			...newThread,
+			[e.target.name]: e.target.value
+		});
+	};
+	
 	return (
 		<div className="form">
 			{
-				boardInput && 
-				<input 
-					name="board"
-					placeholder="board"
-					onChange={handleData}
-				/>
+				boards && 
+				<select name="board" onChange={handleData}>
+					<option hidden/>
+					{
+						boards.map(({name}, i) => (
+							<option key={i} value={name}>{name}</option>
+						))
+					}
+				</select>
 			}
 			<textarea
 				name="text"
@@ -60,6 +65,7 @@ export const CreateForm = ({ boardInput, board, placeholder, url, action, quick_
 			<input
 				name="delete_password"
 				placeholder="password to delete"
+				type="password"
 				value={newThread.delete_password}
 				onChange={handleData}
 			/>

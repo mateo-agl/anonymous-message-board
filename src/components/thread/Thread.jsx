@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Reply } from "./reply/Reply";
 import { CreateForm, DeleteBtn, DeleteForm, ReportBtn } from "../shared";
+import { Link } from "react-router-dom";
 
-export const Thread = ({fetchData}) => {
+export const Thread = ({ host, fetchData }) => {
 	const currentURL = window.location.pathname.split("/");
-	const devHostName = "http://localhost:8080";
-	const devMode = process.env.NODE_ENV === "development";
-	const repliesUrl = `${devMode ? devHostName : ""}/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`;
-	const threadsUrl = `${devMode ? devHostName : ""}/api/threads/${currentURL[2]}`;
+	const repliesUrl = `${host}/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`;
+	const threadsUrl = `${host}/api/threads/${currentURL[2]}`;
 	
-	const [thread, setThread] = useState({
-		formClass: "",
-		reqBody: "",
-		replies: []
-	});
+	const [thread, setThread] = useState({ formClass: "", reqBody: "", replies: [] });
 	
 	const threadDate = new Date(thread.created_on).toLocaleString().slice(0,-3);
 	
@@ -39,18 +33,11 @@ export const Thread = ({fetchData}) => {
 	
 	return (
 		<div className="container thread-route">
-			<div className="board-cont">
-				<Link className="board-link" to="/">Home</Link>
-				<Link className="board-link" to="/b/games">Games</Link>
-				<Link className="board-link" to="/b/technology">Technology</Link>
-				<Link className="board-link" to="/b/politics">Politics</Link>
-				<Link className="board-link" to="/b/animation">Animation</Link>
-				<Link className="board-link" to="/b/food">Food</Link>
-			</div>
-			<header>
+			<Link className="home" to="/">Home</Link>
+			<div className="thread-data">
 				<h2>{thread._id}</h2>
 				<label>{threadDate}</label>
-			</header>
+			</div>
 			<div className="thread">
 				<p>{thread.text}</p>
 				<div className="actions-cont">
