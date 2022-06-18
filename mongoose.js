@@ -9,12 +9,14 @@ const repliesSchema = mongoose.Schema({
 });
 
 const threadsSchema = mongoose.Schema({
+  _id: mongoose.ObjectId,
   text: String,
   created_on: Date,
   bumped_on: Date,
   reported: Boolean,
   delete_password: String,
-  replies: [repliesSchema]
+  replies: [repliesSchema],
+  board: String
 });
 
 const boardSchema = mongoose.Schema({
@@ -30,6 +32,7 @@ const createThread = (board, text, password, done) => {
   const date = new Date();
 
   const newThread = {
+    _id: mongoose.Types.ObjectId(),
     text: text,
     created_on: date,
     bumped_on: date,
@@ -38,25 +41,14 @@ const createThread = (board, text, password, done) => {
     replies: []
   };
 
-  const newBoard = new Boards({
-    name: board,
-    threads: [newThread]
-  });
-
   Boards.findOne({ name: board }, (err, doc) => {
     if(err) return console.error(err);
-    if(doc) {
-      doc.threads.unshift(newThread);
-      doc.save((err, doc) => {
-        if(err) return console.error(err);
-        return done(doc.threads[0]);
-      });
-      return;
-    };
-
-    newBoard.save((err, doc) => {
-      if (err) return console.error(err);
-      done(doc.threads[0]);
+    doc.threads.unshift(newThread);
+    return doc.save(err => {
+      if(err) return console.error(err);
+      delete newThread.delete_password;
+      delete newThread.reported;
+      return done(newThread);
     });
   });
 };
@@ -66,7 +58,7 @@ const createReply = (board, text, password, thread_id, done) => {
   const id = mongoose.Types.ObjectId(thread_id);
 
   const newReply = {
-    _id: new mongoose.Types.ObjectId(),
+    _id: mongoose.Types.ObjectId(),
     text: text,
     created_on: date,
     delete_password: password,
@@ -87,13 +79,26 @@ const createReply = (board, text, password, thread_id, done) => {
   });
 };
 
+const findBoards = done => {
+  Boards.find()
+    .select("-_id name")
+    .sort("-__v")
+    .exec((err, arr) => {
+      if(err) return console.error(err);
+      done(arr);
+    });
+};
+
 const findRecentThreads = (limit, done) => {
   Boards.find()
     .select(filter)
     .exec((err, arr) => {
       if(err) return console.error(err);
       let threads = [];
-      arr.map(b => threads = [...threads, ...b.threads]);
+      arr.map(b => {
+        for(let i = 0; i < b.threads.length; i++) b.threads[i].board = b.name;
+        threads = [...threads, ...b.threads];
+      });
       threads.sort((a, b) => b.created_on - a.created_on);
       done(threads.slice(0, limit));
     });
@@ -104,6 +109,7 @@ const findThreadsByBoard = (board, done) => {
     .select(filter)
     .exec((err, doc) => {
       if (err) return console.error(err);
+      if (!doc) return done(null);
       done(doc.threads);
     });
 };
@@ -182,6 +188,7 @@ const reportReply = (board, thread_id, reply_id, done) => {
 module.exports = {
   createThread,
   createReply,
+  findBoards,
   findRecentThreads,
   findThreadsByBoard,
   findReplies,
