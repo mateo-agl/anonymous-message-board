@@ -15,17 +15,17 @@ export const DeleteForm = ({ url, reqBody, action, formClass, handleForm }) => {
 
 	return (
 		<>
-			<div className={`del form-cont ${formClass}`}>
+			<div className={`pop-up form-cont ${formClass}`}>
 				<div className="form">
 					<input 
-						className="del-input"
+						className="pop-up-input"
 						placeholder="password"
 						type="password"
 						value={password}
 						onChange={handlePassword}
 					/>
 					<button 
-						className="del-pword-btn submit"
+						className="pop-up-btn submit"
 						type="button"
 						onClick={sendDelReq}
 					>

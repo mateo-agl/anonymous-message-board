@@ -293,12 +293,12 @@ nav {
   margin: 1em 0 0 auto;
 }
 
-.del.form-cont, .background {
+.pop-up.form-cont, .background {
   display: none;
   position: fixed;
 }
 
-.del.form-cont {
+.pop-up.form-cont {
   top: calc(50% - 54px);
   left: calc(50% - 196px / 2);
   z-index: 2;
@@ -314,20 +314,20 @@ nav {
   z-index: 1;
 }
 
-.del.form-cont.show, .background.show {
+.pop-up.form-cont.show, .background.show {
   display: inline-block;
 }
 
-.del-pword-btn {
+.pop-up-btn {
   color: var(--primary-bg-color);
   margin-inline: auto;
 }
 
-.del-input {
+.pop-up-input {
   display: inline-block;
 }
 
-.del-btn, .rep-btn, .del-input {
+.del-btn, .rep-btn, .pop-up-input {
   padding: 6px 4px;
   max-height: 26px;
 }

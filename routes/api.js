@@ -1,4 +1,5 @@
 const {
+  createBoard,
   createThread,
   createReply,
   findBoards,
@@ -14,6 +15,7 @@ const {
 const apiRoutes = app => {
   app
     .route("/api/boards")
+    .post((req, res) => createBoard(req.body.board, data => res.json(data)))
     .get((req, res) => findBoards(arr => res.send(arr)));
 
   app

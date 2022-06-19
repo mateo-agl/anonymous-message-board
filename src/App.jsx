@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import { Main, Board, Thread } from "./components";
 import { Search } from './Search';
 import axios from 'axios';
@@ -20,7 +20,9 @@ const App = () => {
 			.catch(err => console.error(err));
 	};
 
-	useEffect(fetchBoards, []);
+	const navigate = useNavigate();
+
+	useEffect(fetchBoards, [navigate]);
 
 	const fetchData = (url, action) => {
 		axios.get(url)

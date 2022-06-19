@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-export const CreateForm = ({ boards, board, placeholder, url, action, quick_reply }) => {
+export const CreateForm = ({ boards, board, placeholder, url, action, quick_reply, handleBoardForm }) => {
 	const [newThread, setNewThread] = useState({
 		board: "",
 		delete_password: "",
@@ -37,6 +37,8 @@ export const CreateForm = ({ boards, board, placeholder, url, action, quick_repl
 	};
 
 	const handleData = e => {
+		!e.target.value && handleBoardForm();
+		
 		setNewThread({
 			...newThread,
 			[e.target.name]: e.target.value
@@ -48,10 +50,11 @@ export const CreateForm = ({ boards, board, placeholder, url, action, quick_repl
 			{
 				boards && 
 				<select name="board" onChange={handleData}>
-					<option hidden/>
+					<option hidden>Select a board</option>
+					<option value="">Create a board</option>
 					{
 						boards.map(({name}, i) => (
-							<option key={i} value={name}>{name}</option>
+							<option key={i}>{name}</option>
 						))
 					}
 				</select>

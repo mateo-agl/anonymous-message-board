@@ -28,6 +28,22 @@ const Boards = mongoose.model("Boards", boardSchema);
 
 const filter = "-threads.reported -threads.delete_password -threads.replies.reported -threads.replies.delete_password";
 
+const createBoard = (board, done) => {
+  const newBoard = Boards({
+    name: board,
+    threads: []
+  });
+
+  Boards.findOne({ name: board }, (err, doc) => {
+    if(err) return console.error(err);
+    if(doc) return done(null);
+    newBoard.save((err, doc) => {
+      if(err) return console.error(err);
+      done(doc);
+    });
+  });
+};
+
 const createThread = (board, text, password, done) => {
   const date = new Date();
 
@@ -194,6 +210,7 @@ const reportReply = (board, thread_id, reply_id, done) => {
 };
 
 module.exports = {
+  createBoard,
   createThread,
   createReply,
   findBoards,
