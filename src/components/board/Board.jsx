@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Thread } from "./thread/Thread.jsx";
 import { CreateForm, DeleteForm } from "../shared";
-import { useNavigate } from "react-router";
 
-export const Board = ({ host, fetchData }) => {
-	const currentBoard = window.location.pathname.split("/")[2];
+export const Board = ({ host, fetchData, currentBoard }) => {
 	const url = `${host}/api/threads/${currentBoard}`;
-
-	const navigate = useNavigate();
 	
 	const [data, setData] = useState({
 		formClass: "",
@@ -23,7 +19,7 @@ export const Board = ({ host, fetchData }) => {
 		})
 	);
 	
-	useEffect(() => getThreads(), [navigate]);
+	useEffect(() => getThreads(), [currentBoard]);
 
 	const createAction = newData => newData ? (getThreads(), true) : alert("Oops, an error has ocurred");
 

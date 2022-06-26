@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Reply } from "./reply/Reply";
 import { CreateForm, DeleteBtn, DeleteForm, ReportBtn } from "../shared";
 
-export const Thread = ({ host, fetchData }) => {
-	const currentURL = window.location.pathname.split("/");
-	const repliesUrl = `${host}/api/replies/${currentURL[2]}?thread_id=${currentURL[3]}`;
-	const threadsUrl = `${host}/api/threads/${currentURL[2]}`;
+export const Thread = ({ host, fetchData, currentBoard, currentId }) => {
+	const repliesUrl = `${host}/api/replies/${currentBoard}?thread_id=${currentId}`;
+	const threadsUrl = `${host}/api/threads/${currentBoard}`;
 	
 	const [thread, setThread] = useState({ formClass: "", reqBody: "", replies: [] });
 	

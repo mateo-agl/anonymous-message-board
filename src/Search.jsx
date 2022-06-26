@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ReactComponent as Arrow } from "./assests/arrow-left-short.svg";
 
-export const Search = ({boards}) => {
+export const Search = ({boards, pathname}) => {
 	const [board, setBoard] = useState({name: "", matches: []});
 
 	const navigate = useNavigate();
@@ -23,7 +23,7 @@ export const Search = ({boards}) => {
 	return (
 		<div className="search form-cont">
 			{
-				window.location.pathname !== "/" && 
+				pathname.length > 2 && 
 				<Link to="/"><Arrow className="home"/></Link>
 			}
 			<div id="search-cont">

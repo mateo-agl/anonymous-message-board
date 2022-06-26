@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes, useNavigate } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { Main, Board, Thread } from "./components";
 import { Search } from './Search';
 import axios from 'axios';
@@ -20,9 +20,11 @@ const App = () => {
 			.catch(err => console.error(err));
 	};
 
-	const navigate = useNavigate();
+	const location = useLocation();
 
-	useEffect(fetchBoards, [navigate]);
+	const pathname = location.pathname.split("/");
+
+	useEffect(fetchBoards, [location]);
 
 	const fetchData = (url, action) => {
 		axios.get(url)
@@ -32,7 +34,7 @@ const App = () => {
 	
 	return (
 		<>
-			<Search boards={boards}/>
+			<Search boards={boards} pathname={pathname}/>
 			<nav>
 				<h2>Popular boards</h2>
 				<div className="board-cont">
@@ -46,15 +48,36 @@ const App = () => {
 			<Routes>
 				<Route path="/">
 					<Route
-						element={<Main boards={boards} fetchData={fetchData} host={host}/>}
+						element={
+							<Main 
+								boards={boards}
+								fetchData={fetchData}
+								host={host}
+							/>
+						}
 						index
 					/>
 					<Route
-						element={<Board boards={boards.slice(0, 5)} fetchData={fetchData} host={host}/>}
+						element={
+							<Board
+								boards={boards.slice(0, 5)}
+								currentBoard={pathname[2]}
+								fetchData={fetchData}
+								host={host}	
+							/>
+						}
 						path="b/:board"
 					/>
 					<Route
-						element={<Thread boards={boards.slice(0, 5)} fetchData={fetchData} host={host}/>}
+						element={
+							<Thread
+								boards={boards.slice(0, 5)}
+								currentBoard={pathname[2]}
+								currentId={pathname[3]}
+								fetchData={fetchData}
+								host={host}
+							/>
+						}
 						path="b/:board/:thread"
 					/>
 					<Route element={<Error/>} path="*"/>
