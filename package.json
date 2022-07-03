@@ -7,6 +7,7 @@
     "client": "react-scripts start",
     "start": "nodemon index.js",
     "build": "react-scripts build",
+    "apitest": "mocha routes/tests.js",
     "lint": "npx eslint --ext .jsx,.js src",
     "lint:fix": "npx eslint --fix --ext .jsx,.js src"
   },
@@ -44,12 +45,15 @@
     ]
   },
   "devDependencies": {
+    "chai": "^4.3.6",
+    "chai-http": "^4.3.0",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-react": "^7.29.3",
+    "mocha": "^10.0.0",
     "nodemon": "^2.0.15"
   },
   "license": "ISC",
