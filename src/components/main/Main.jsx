@@ -29,7 +29,7 @@ export const Main = ({ boards, host, fetchData }) => {
 	});
 
 	const createBoard = () => {
-		axios.post(`${host}/api/boards`, { board: mainState.board })
+		axios.post(`${host}/api/boards`, { name: mainState.board })
 			.then(res => res.data 
 				? navigate(`b/${res.data.name}`)
 				: alert("This board already exists")

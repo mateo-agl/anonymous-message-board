@@ -16,7 +16,7 @@ export const ReportBtn = ({url, reqBody}) => {
 		};
 	}, [reqBody]);
 
-	const sendReportReq = () => axios.put(url, reqBody)
+	const sendReportReq = () => axios.put(url, {state: btn.text, ...reqBody})
 		.then(() => {
 			const reportedList = localStorage.getItem("reported");
 			let newState = {};
