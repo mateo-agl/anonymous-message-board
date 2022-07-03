@@ -4,8 +4,9 @@ const repliesSchema = mongoose.Schema({
   _id: mongoose.ObjectId,
   text: String,
   created_on: Date,
+  bumped_on: Date,
   delete_password: String,
-  reported: Boolean,
+  reported: Number,
 });
 
 const threadsSchema = mongoose.Schema({
@@ -13,7 +14,7 @@ const threadsSchema = mongoose.Schema({
   text: String,
   created_on: Date,
   bumped_on: Date,
-  reported: Boolean,
+  reported: Number,
   delete_password: String,
   replies: [repliesSchema],
   board: String
@@ -52,7 +53,7 @@ const createThread = (board, text, password, done) => {
     text: text,
     created_on: date,
     bumped_on: date,
-    reported: false,
+    reported: 0,
     delete_password: password,
     replies: []
   };
@@ -78,7 +79,7 @@ const createReply = (board, text, password, thread_id, done) => {
     text: text,
     created_on: date,
     delete_password: password,
-    reported: false,
+    reported: 0,
   };
 
   Boards.findOne({ name: board }, (err, doc) => {
@@ -154,7 +155,7 @@ const deleteThread = (board, thread_id, password, done) => {
   Boards.findOne({ name: board }, (err, doc) => {
     if (err) return console.error(err);
     const thread = doc.threads.id(id);
-    if(!thread || thread.delete_password !== password) return done(null);
+    if(!thread || thread.delete_password !== password) return done(false);
     thread.remove();
     doc.save(err => {
       if (err) return console.error(err);
@@ -170,7 +171,7 @@ const deleteReply = (board, thread_id, reply_id, password, done) => {
     if (err) return console.error(err);
     const thread = doc.threads.id(t_id);
     const reply = thread.replies.id(r_id);
-    if (!reply || reply.delete_password !== password) return done(null);
+    if (!reply || reply.delete_password !== password) return done(false);
     reply.remove();
     doc.save(err => {
       if (err) return console.error(err);
@@ -179,32 +180,34 @@ const deleteReply = (board, thread_id, reply_id, password, done) => {
   });
 };
 
-const reportThread = (board, thread_id, done) => {
+const deleteBoard = name => Boards.findOneAndRemove({ name: name });
+
+const reportThread = (state, board, thread_id, done) => {
   const id = mongoose.Types.ObjectId(thread_id);
   Boards.findOne({ name: board }, (err, doc) => {
     if (err) return console.error(err);
     const thread = doc.threads.id(id);
-    if (thread.reported) return done(false);
-    thread.reported = true;
-    doc.save((err) => {
+    state === "Reported" ? thread.reported=-1 : thread.reported=+1;
+    thread.bumped_on = new Date();
+    doc.save(err => {
       if (err) return console.error(err);
-      done(true);
+      done(state === "Reported" ? false : true);
     });
   });
 };
 
-const reportReply = (board, thread_id, reply_id, done) => {
+const reportReply = (state, board, thread_id, reply_id, done) => {
   const t_id = mongoose.Types.ObjectId(thread_id);
   const r_id = mongoose.Types.ObjectId(reply_id);
   Boards.findOne({ name: board }, (err, doc) => {
     if (err) return console.error(err);
     const thread = doc.threads.id(t_id);
     const reply = thread.replies.id(r_id);
-    if (reply.reported) return done(false);
-    reply.reported = true;
-    doc.save((err) => {
+    state === "Reported" ? reply.reported=-1 : reply.reported=+1;
+    thread.bumped_on = new Date();
+    doc.save(err => {
       if (err) return console.error(err);
-      done(true);
+      done(state === "Reported" ? false : true);
     });
   });
 };
@@ -220,5 +223,6 @@ module.exports = {
   deleteThread,
   deleteReply,
   reportThread,
-  reportReply
+  reportReply,
+  deleteBoard
 };
