@@ -33,14 +33,14 @@ export const Search = ({boards, pathname}) => {
 					name="search"
 					placeholder="Search a board"
 					value={board.name}
-					onBlur={reset}
+					onBlur={e => !e.relatedTarget && setBoard({ ...board, matches: [] })}
 					onChange={handleBoardName}
 					onKeyDown={handleEnter}
 				/>
 				<div id="matches">
 					{
 						board.matches.map(({name}, i) => (
-							<Link className="match" key={i} to={`b/${name}`}>{name}</Link>
+							<Link className="match" onClick={reset} key={i} to={`b/${name}`}>{name}</Link>
 						))
 					}
 				</div>
