@@ -34,3 +34,6 @@ Para ver si el código sigue las reglas de eslint.
 
 ### npm run lint:fix
 Para modificar la parte del código que no siga las reglas.
+
+### npm run apitest
+Para testear la api.
