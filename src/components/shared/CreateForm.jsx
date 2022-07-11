@@ -1,75 +1,129 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-export const CreateForm = ({ boards, board, placeholder, url, action, quick_reply, handleBoardForm }) => {
-	const [newThread, setNewThread] = useState({
-		board: "",
-		delete_password: "",
-		text: ""
+export const CreateForm = ({ boards, board, placeholder, url, action, handleBoardForm }) => {
+	const [cFormState, SetCFormState] = useState({
+		selectClass: "",
+		input: "",
+		newThread: {
+			board: board ? board : "",
+			delete_password: "",
+			text: ""
+		}
 	});
-	
-	const enableBtn = boards
-		? newThread.delete_password && newThread.text && newThread.board ? "enabled" : ""
-		: newThread.delete_password && newThread.text ? "enabled" : "";
 
-	const sendNewEleReq = () => {
-		const newObj = board 
-			? {...newThread, board: board} 
-			: quick_reply 
-				? { ...newThread, quick_reply: true }
-				: newThread;
+	const enableBtn = cFormState.newThread.delete_password 
+		&& cFormState.newThread.text 
+		&& (boards ? cFormState.newThread.board : true) 
+		? "enabled" 
+		: "";
 
-		const newUrl = url + newThread.board;
-		
-		enableBtn && (
-			axios.post(newUrl, newObj)
-				.then(res => action({
-					...res.data,
-					board: board ? board : newThread.board
-				}))
-				.then(res => res && setNewThread({
-					board: "",
+	const sendNewEleReq = () => {		
+		if (!enableBtn) return;		
+		axios.post(url + cFormState.newThread.board, cFormState.newThread)
+			.then(res => action({
+				...res.data,
+				board: cFormState.newThread.board
+			}))
+			.then(res => res && SetCFormState({
+				selectClass: "",
+				input: "",
+				newThread: {
+					board: board ? board : "",
 					delete_password: "",
 					text: ""
-				}))
-				.catch(err => console.error(err))
-		);
+				}
+			}))
+			.catch(err => console.error(err));
 	};
 
 	const handleData = e => {
-		!e.target.value && handleBoardForm();
-		
-		setNewThread({
-			...newThread,
-			[e.target.name]: e.target.value
+		SetCFormState({
+			...cFormState,
+			newThread: { 
+				...cFormState.newThread,
+				[e.target.name]: e.target.value
+			}
 		});
 	};
-	
+
+	const handleBoardInput = e => {
+		SetCFormState({
+			...cFormState,
+			input: e.target.value
+		});
+	};
+
+	const handleOpts = e => {
+		if (e.type === "blur"
+			&& e.relatedTarget?.className.includes("select")) return;
+
+		SetCFormState({
+			...cFormState,
+			input: cFormState.newThread.board,
+			selectClass: e.type === "blur" ? "" : "show"
+		});
+	};
+
+	const selectBoard = e => {
+		SetCFormState({
+			...cFormState,
+			input: e.target.textContent,
+			selectClass: "",
+			newThread: {
+				...cFormState.newThread,
+				board: e.target.textContent
+			}
+		});
+	};
+
+	const createBoard = () => {
+		SetCFormState({ ...cFormState, selectClass: "" });
+		handleBoardForm();
+	};
+
 	return (
 		<div className="form">
 			{
 				boards && 
-				<select name="board" onChange={handleData}>
-					<option hidden>Select a board</option>
-					<option value="">Create a board</option>
-					{
-						boards.map(({name}, i) => (
-							<option key={i}>{name}</option>
-						))
-					}
-				</select>
+				<div className="select-cont" tabIndex={-1}>
+					<input
+						autoComplete="off"
+						className="select-input"
+						name="input"
+						placeholder="Select a board"
+						type="text"
+						value={cFormState.input}
+						onBlur={handleOpts}
+						onChange={handleBoardInput}
+						onFocus={handleOpts}
+					/>
+					<div className={`select-matches ${cFormState.selectClass}`}>
+						<div className="select match" onClick={createBoard}>
+							Create Board
+						</div>
+						{
+						 	boards.filter(b => b.name.startsWith(cFormState.input))
+								.map(({name}, i) => (
+									<div className="select match" key={i} onClick={selectBoard}>
+										{name}
+									</div>
+								))
+						}
+					</div>
+				</div>
 			}
 			<textarea
 				name="text"
 				placeholder={placeholder}
-				value={newThread.text}
+				value={cFormState.newThread.text}
 				onChange={handleData}
 			/>
 			<input
 				name="delete_password"
 				placeholder="password to delete"
 				type="password"
-				value={newThread.delete_password}
+				value={cFormState.newThread.delete_password}
 				onChange={handleData}
 			/>
 			<button
