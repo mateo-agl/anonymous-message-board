@@ -40,7 +40,7 @@ export const Search = ({boards, pathname}) => {
 				<div id="matches">
 					{
 						board.matches.map(({name}, i) => (
-							<Link className="match" onClick={reset} key={i} to={`b/${name}`}>{name}</Link>
+							<Link className="match" key={i} to={`b/${name}`} onClick={reset}>{name}</Link>
 						))
 					}
 				</div>
