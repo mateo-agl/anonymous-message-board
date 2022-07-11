@@ -112,6 +112,9 @@ hr {
   padding: 0;
   margin: 0;
   z-index: 3;
+  border: none;
+  border-bottom: var(--border);
+  border-radius: 0;
 }
 
 .home {
@@ -344,6 +347,39 @@ nav {
 }
 
 /* Forms */
+
+/* Select */
+
+.select-cont {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+}
+
+.select-input {
+  cursor: default;
+}
+
+.select-matches {
+  display: none;
+  max-height: 9em;
+  overflow-y: auto;
+  position: absolute;
+  background: var(--primary-bg-color);
+  width: 100%;
+  top: calc(100% - 8px);
+  z-index: 1;
+}
+
+.select-matches.show {
+  display: block;
+}
+
+.select.match {
+  cursor: pointer;
+}
+
+/* Select */
 
 .reportThread {
   margin-right: 1em;
