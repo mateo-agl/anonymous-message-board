@@ -54,21 +54,19 @@ export const Thread = ({ host, fetchData, currentBoard, currentId }) => {
 						<CreateForm
 							action={createAction}
 							placeholder={"Quick Reply"}
-							quick_reply={true}
 							url={repliesUrl}
 						/>
 					</div>
 					<div className="replies">
 						{
-							thread.replies.map(
-								(rep, i) =>
-									<Reply
-										handleForm={handleForm}
-										key={i}
-										rep={rep}
-										thread={thread}
-										url={repliesUrl}
-									/>
+							thread.replies.map((rep, i) =>
+								<Reply
+									handleForm={handleForm}
+									key={i}
+									rep={rep}
+									thread={thread}
+									url={repliesUrl}
+								/>
 							)
 						}
 					</div>
