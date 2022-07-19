@@ -44,10 +44,10 @@ git clone https://github.com/mateo-agl/anonymous-message-board.git
 cd anonymous-message-board
 npm install
 ```
-Crea un archivo .env y escribe las siguientes variable:
+Crea un archivo .env y escribe las siguientes variables:
 ```
-MODE=
-URI=
+MODE=development o production
+URI=[URI de tu base de datos]
 ```
 MODE puede ser igual a `production` (inicia la app desde el servidor) o `development` (el servidor y la parte del client se inician por separado). Para iniciar la app necesitas la URI de tu base de datos.
 
@@ -57,7 +57,7 @@ MODE puede ser igual a `production` (inicia la app desde el servidor) o `develop
 Para iniciar el servidor en http://localhost:8080.
 
 ### npm run client
-Para iniciar el servidor de desarrollo en http://localhost:3000.
+Para iniciar el servidor de react en http://localhost:3000.
 
 ### npm run build
 Arma el bundle de la app para poder iniciarla en modo de producción.
