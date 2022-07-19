@@ -16,7 +16,9 @@ Demo: https://anon-m-board.herokuapp.com
 ## API
 
 ### GET
-
+- ```/api/boards/```
+- ```/api/threads/```
+- ```/api/threads/:board```
 
 ## Instalación
 
