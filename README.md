@@ -46,8 +46,8 @@ npm install
 ```
 Crea un archivo .env y escribe las siguientes variables:
 ```
-MODE=development o production
-URI=[URI de tu base de datos]
+MODE=[development o production]
+URI=[URI]
 ```
 MODE puede ser igual a `production` (inicia la app desde el servidor) o `development` (el servidor y la parte del client se inician por separado). Para iniciar la app necesitas la URI de tu base de datos.
 
