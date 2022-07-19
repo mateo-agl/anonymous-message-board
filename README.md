@@ -4,8 +4,19 @@ Demo: https://anon-m-board.herokuapp.com
 ## Funcionalidades
 
 - Crear boards.
+- Buscar boards.
+- Navegar entre boards.
 - Crear hilos.
-- Responder hilos.
+- Reportar hilos.
+- Borrar hilos.
+- Crear respuestas.
+- Reportar respuestas.
+- Borrar respuestas.
+
+## API
+
+### GET
+
 
 ## Instalación
 
