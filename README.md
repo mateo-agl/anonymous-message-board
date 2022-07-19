@@ -1,6 +1,12 @@
 ﻿# Anonymous Message Board
 Demo: https://anon-m-board.herokuapp.com
 
+## Funcionalidades
+
+- Crear boards.
+- Crear hilos.
+- Responder hilos.
+
 ## Instalación
 
 Para iniciar esta app localmente debes tener una base de datos en MongoDB.
