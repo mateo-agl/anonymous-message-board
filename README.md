@@ -15,24 +15,24 @@ Demo: https://anon-m-board.herokuapp.com
 
 ## API
 
-- ```/api/boards/```
-  - POST: Crea un board nuevo.
-  - GET: Obtiene todos los boards ordenados de más reciente a menos reciente.
+```/api/boards/```
+- POST: Crea un board nuevo.
+- GET: Obtiene todos los boards ordenados de más reciente a menos reciente.
 
-- ```/api/threads?limit=[número]```
-  - GET: Obtiene una cantidad específica de hilos de todos los boards ordenados del más reciente al menos reciente.
+```/api/threads?limit=[número]```
+- GET: Obtiene una cantidad específica de hilos de todos los boards ordenados del más reciente al menos reciente.
 
-- ```/api/threads/:board```
-  - POST: Crea un hilo nuevo y lo añade dentro de un board.
-  - GET: Obtiene los hilos pertenecientes a un board.
-  - PUT: Aumenta el número de reportes de un hilo.
-  - DELETE: Elimina un hilo.
+```/api/threads/:board```
+- POST: Crea un hilo nuevo y lo añade dentro de un board.
+- GET: Obtiene los hilos pertenecientes a un board.
+- PUT: Aumenta el número de reportes de un hilo.
+- DELETE: Elimina un hilo.
 
-- ```/api/replies/:board```
-  - POST: Crea una respuesta nueva y la añade dentro de un hilo.
-  - GET: Obtiene las respuestas pertenecientes a un hilo.
-  - PUT: Aumenta el número de reportes de una respuesta.
-  - DELETE: Elimina una respuesta.
+```/api/replies/:board```
+- POST: Crea una respuesta nueva y la añade dentro de un hilo.
+- GET: Obtiene las respuestas pertenecientes a un hilo.
+- PUT: Aumenta el número de reportes de una respuesta.
+- DELETE: Elimina una respuesta.
 
 ## Instalación
 
