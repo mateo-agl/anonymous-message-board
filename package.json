@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "client": "react-scripts start",
-    "postinstall": "tsc server/index.ts",
-    "start": "tsc & node server/index.js",
+    "postinstall": "tsc",
+    "start": "node server/index.js",
     "dev-start": "nodemon server/index.ts",
     "build": "react-scripts build",
     "apitest": "ts-mocha server/routes/tests.ts",
