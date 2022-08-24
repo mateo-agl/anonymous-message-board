@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { ReportBtnState } from "../../../@types/types";
 
 export const ReportBtn = ({url, reqBody}) => {
-	const [btn, setBtn] = useState({text: "Report", class: ""});
+	const [btn, setBtn] = useState<ReportBtnState>({text: "Report", class: ""});
 	const id = reqBody.reply_id ? reqBody.reply_id : reqBody.thread_id;
 
 	useEffect(() => {
@@ -13,21 +14,23 @@ export const ReportBtn = ({url, reqBody}) => {
 				? {text: "Reported", class: "reported"}
 				: {text: "Report", class: ""};
 			setBtn(state);
-		};
+		}
 	}, [reqBody]);
 
 	const sendReportReq = () => axios.put(url, {state: btn.text, ...reqBody})
 		.then(() => {
 			const reportedList = localStorage.getItem("reported");
-			let newState = {};
-			let newList = [];
+			let newState: ReportBtnState;
+			let newList: Array<string>;
+
 			if(btn.text === "Report") {
 				newState = {text: "Reported", class: "reported"};
 				newList = reportedList ? [...JSON.parse(reportedList), id] : [id];
 			} else {
 				newState = {text: "Report", class: ""};
-				newList = JSON.parse(reportedList).filter(i => i !== id);
+				newList = reportedList ? JSON.parse(reportedList).filter((i: string) => i !== id) : [];
 			}
+
 			setBtn(newState);
 			localStorage.setItem("reported", JSON.stringify(newList));
 		})

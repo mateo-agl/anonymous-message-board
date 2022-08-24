@@ -2,9 +2,9 @@ import axios from "axios";
 import React, { useState } from "react";
 
 export const DeleteForm = ({ url, reqBody, action, formClass, handleForm }) => {
-	const [password, setPassword] = useState("");
+	const [password, setPassword] = useState<string>("");
     
-	const handlePassword = e => setPassword(e.target.value);
+	const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value);
 
 	const sendDelReq = () => !password 
 		? alert("The password input is empty.")

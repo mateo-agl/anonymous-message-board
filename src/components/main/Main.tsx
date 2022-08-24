@@ -1,26 +1,23 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavigateFunction, useNavigate } from "react-router-dom";
+import { MainState, ThreadState } from "../../../@types/types";
 import { CreateForm } from "../shared";
 
 export const Main = ({ boards, host, fetchData }) => {
-	const [mainState, setMainState] = useState({
-		bFormClass: "",
-		board: "",
-		threadList: []
-	});
+	const [mainState, setMainState] = useState<MainState>({});
 	
 	const threadsUrl = `${host}/api/threads?limit=10`;
 
-	const navigate = useNavigate();
+	const navigate: NavigateFunction = useNavigate();
 
-	const getRecentThreads = data => setMainState({
-		...mainState, threadList: data
+	const getRecentThreads = (data: Array<ThreadState>) => setMainState({
+		bFormClass: "", board: "", threadList: data
 	});
 
 	useEffect(() => fetchData(threadsUrl, getRecentThreads), []);
 
-	const createAction = data => data && navigate(`b/${data.board}/${data._id}`);
+	const createAction = (data: ThreadState) => data && navigate(`b/${data.board}/${data._id}`);
 
 	const handleBoardForm = () => setMainState({
 		...mainState,
@@ -37,15 +34,17 @@ export const Main = ({ boards, host, fetchData }) => {
 			.catch(err => console.error(err));
 	};
 
-	const handleInput = e => setMainState({ ...mainState, board: e.target.value });
+	const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => setMainState({ ...mainState, board: e.target.value });
 
 	const newThreadUrl = `${host}/api/threads/`;
-	
+
+	if (!mainState.threadList) return null;
 	return (
 		<div className="container">
 			<div className="form-cont">
 				<CreateForm
 					action={createAction}
+					board={undefined}
 					boards={boards}
 					handleBoardForm={handleBoardForm}
 					placeholder={"Thread text..."}
@@ -61,12 +60,12 @@ export const Main = ({ boards, host, fetchData }) => {
 								<div className="thread-data">
 									<Link className="board-link" to={`b/${t.board}`}>{t.board}</Link>
 									<label className="id">
-										{`id: ${t._id} (${new Date(t.created_on).toLocaleString().slice(0,-3)})`}
+										{`id: ${t._id} (${t.created_on ? new Date(t.created_on).toLocaleString().slice(0,-3) : ""})`}
 									</label>
 								</div>
 								<p className="thread-text">{t.text}</p>
 							</div>
-							<label className="main-replies">{`${t.replies.length} replies`}</label>
+							<label className="main-replies">{`${t.replies ? t.replies.length : 0} replies`}</label>
 							<Link className="thread-link" to={`b/${t.board}/${t._id}`}/>
 						</div>
 					)

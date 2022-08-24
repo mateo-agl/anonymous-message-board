@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Location, Route, Routes, useLocation } from "react-router-dom";
 import { Main, Board, Thread } from "./components";
 import { Search } from './Search';
 import axios from 'axios';
 import "./app.styles.css";
+import { BoardObj, FetchData } from '../@types/types';
 
 const Error = () => <h1>{"This route doesn't exist"}</h1>;
 
 const App = () => {
-	const [boards, setBoards] = useState([]);
+	const [boards, setBoards] = useState<Array<BoardObj>>([]);
 
 	const devHostName = "http://localhost:8080";
 	const host = `${process.env.NODE_ENV === "development" ? devHostName : ""}`;
@@ -20,13 +21,13 @@ const App = () => {
 			.catch(err => console.error(err));
 	};
 
-	const location = useLocation();
+	const location: Location = useLocation();
 
-	const pathname = location.pathname.split("/");
+	const pathname: Array<string> = location.pathname.split("/");
 
 	useEffect(fetchBoards, [location]);
 
-	const fetchData = (url, action) => {
+	const fetchData: FetchData = (url, action) => {
 		axios.get(url)
 			.then(res => action(res.data))
 			.catch(err => console.error(err));
@@ -39,7 +40,7 @@ const App = () => {
 				<h2>Popular boards</h2>
 				<div className="board-cont">
 					{
-						boards.slice(0,5).map(({name}, i) => (
+						boards.slice(0,5).map(({name}, i: number) => (
 							<Link className="board-link" key={i} to={`/b/${name}`}>{name}</Link>
 						))
 					}
@@ -60,7 +61,6 @@ const App = () => {
 					<Route
 						element={
 							<Board
-								boards={boards.slice(0, 5)}
 								currentBoard={pathname[2]}
 								fetchData={fetchData}
 								host={host}	
@@ -71,7 +71,6 @@ const App = () => {
 					<Route
 						element={
 							<Thread
-								boards={boards.slice(0, 5)}
 								currentBoard={pathname[2]}
 								currentId={pathname[3]}
 								fetchData={fetchData}

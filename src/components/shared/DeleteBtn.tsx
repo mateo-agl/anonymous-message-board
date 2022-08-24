@@ -1,3 +1,5 @@
+import React from "react";
+
 export const DeleteBtn = ({ reqBody, handleForm }) => (
 	<button 
 		className="del-btn"

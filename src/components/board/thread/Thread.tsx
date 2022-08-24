@@ -1,10 +1,12 @@
+import React from "react";
 import { Link } from "react-router-dom";
+import { RepliesData } from "../../../../@types/types";
 import { DeleteBtn, ReportBtn } from "../../shared";
 
 export const Thread = ({ thread, url, handleForm }) => {
-	const replies = thread.replies.slice(0, 3);
-	const hiddenCount = thread.replies.length > 3 ? thread.replies.length - 3 : 0;
-	const threadDate = new Date(thread.created_on).toLocaleString().slice(0,-3);
+	const replies: Array<RepliesData> = thread.replies.slice(0, 3);
+	const hiddenCount: number = thread.replies.length > 3 ? thread.replies.length - 3 : 0;
+	const threadDate: string = new Date(thread.created_on).toLocaleString().slice(0,-3);
 	
 	return (
 		<>

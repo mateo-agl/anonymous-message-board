@@ -1,8 +1,9 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { BoardObj, CreateFormState } from "../../../@types/types";
 
 export const CreateForm = ({ boards, board, placeholder, url, action, handleBoardForm }) => {
-	const [cFormState, SetCFormState] = useState({
+	const [cFormState, SetCFormState] = useState<CreateFormState>({
 		selectClass: "",
 		input: "",
 		newThread: {
@@ -37,7 +38,7 @@ export const CreateForm = ({ boards, board, placeholder, url, action, handleBoar
 			.catch(err => console.error(err));
 	};
 
-	const handleData = e => {
+	const handleData = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
 		SetCFormState({
 			...cFormState,
 			newThread: { 
@@ -47,14 +48,14 @@ export const CreateForm = ({ boards, board, placeholder, url, action, handleBoar
 		});
 	};
 
-	const handleBoardInput = e => {
+	const handleBoardInput = (e: React.ChangeEvent<HTMLInputElement>) => {
 		SetCFormState({
 			...cFormState,
 			input: e.target.value
 		});
 	};
 
-	const handleOpts = e => {
+	const handleOpts = (e: React.FocusEvent<HTMLInputElement>) => {
 		if (e.type === "blur"
 			&& e.relatedTarget?.className.includes("select")) return;
 
@@ -65,14 +66,14 @@ export const CreateForm = ({ boards, board, placeholder, url, action, handleBoar
 		});
 	};
 
-	const selectBoard = e => {
+	const selectBoard = (e: React.MouseEvent<HTMLDivElement>) => {
 		SetCFormState({
 			...cFormState,
-			input: e.target.textContent,
+			input: e.currentTarget.textContent || "",
 			selectClass: "",
 			newThread: {
 				...cFormState.newThread,
-				board: e.target.textContent
+				board: e.currentTarget.textContent || ""
 			}
 		});
 	};
@@ -103,8 +104,8 @@ export const CreateForm = ({ boards, board, placeholder, url, action, handleBoar
 							Create Board
 						</div>
 						{
-						 	boards.filter(b => b.name.startsWith(cFormState.input))
-								.map(({name}, i) => (
+						 	boards.filter((b: BoardObj) => b.name.startsWith(cFormState.input))
+								.map(({name}, i: number) => (
 									<div className="select match" key={i} onClick={selectBoard}>
 										{name}
 									</div>

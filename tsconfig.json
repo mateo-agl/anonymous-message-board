@@ -1,0 +1,9 @@
+{
+    "compilerOptions": {
+      "isolatedModules": true,
+      "esModuleInterop": true,
+      "jsx": "react",
+      "types": ["node", "express", "babel-types", "mocha"],
+    },
+    "include": ["server/index.ts"]
+}

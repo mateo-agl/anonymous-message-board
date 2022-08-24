@@ -5,8 +5,10 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "plugin:react/jsx-runtime"
+        "plugin:react/jsx-runtime",
+        "plugin:@typescript-eslint/recommended"
     ],
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -15,13 +17,15 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react",
+        "@typescript-eslint"
     ],
     "settings": {
         "react": {
             "version": "detect"
         }
     },
+    "root": true,
     "rules": {
         "react/prop-types": 0,
         "react/self-closing-comp": ["error", {
@@ -36,6 +40,7 @@
         "indent": ["warn", "tab"],
         "react/jsx-indent": ["warn", "tab"],
         "multiline-ternary": ["error", "always-multiline"],
-        "semi": ["warn", "always"]
+        "semi": ["warn", "always"],
+        "@typescript-eslint/no-unused-vars": 0
     }
 }

@@ -1,3 +1,4 @@
+import React from "react";
 import { DeleteBtn, ReportBtn } from "../../shared";
 
 export const Reply = ({ handleForm, url, thread, rep }) => {
