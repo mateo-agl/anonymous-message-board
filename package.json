@@ -2,12 +2,12 @@
   "name": "anonymous-message-board",
   "version": "0.0.1",
   "description": "InfoSec project for freeCodeCamp",
+  "main": "index.ts",
   "scripts": {
     "client": "react-scripts start",
-    "postinstall": "tsc",
-    "start": "tsc & node server/index.js",
+    "start": "node server/index.js",
     "dev-start": "nodemon server/index.ts",
-    "build": "react-scripts build",
+    "build": "tsc & react-scripts build",
     "apitest": "ts-mocha server/routes/tests.ts",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint --fix ."
