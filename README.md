@@ -53,14 +53,17 @@ MODE puede ser igual a `production` (inicia la app desde el servidor) o `develop
 
 ## Scripts
 
+### npm dev-start
+Para iniciar el servidor en modo desarrollo en http://localhost:8080.
+
 ### npm start
-Para iniciar el servidor en http://localhost:8080.
+Para iniciar el servidor en modo producción http://localhost:8080.
 
 ### npm run client
-Para iniciar el servidor de react en http://localhost:3000.
+Para iniciar la app de react en http://localhost:3000.
 
 ### npm run build
-Arma el bundle de la app para poder iniciarla en modo de producción.
+Arma el bundle de la app y transpila el servidor para poder iniciarla en modo de producción.
 
 ### npm run lint
 Para ver si el código sigue las reglas de eslint.
